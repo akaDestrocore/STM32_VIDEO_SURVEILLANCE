@@ -1,0 +1,10 @@
+../Drivers/dstr/Src/stm32f407xx_rcc.c:48:6:RCC_OscConfig	19
+../Drivers/dstr/Src/stm32f407xx_rcc.c:177:6:RCC_ClockConfig	12
+../Drivers/dstr/Src/stm32f407xx_rcc.c:259:10:RCC_GetSysClockFreq	5
+../Drivers/dstr/Src/stm32f407xx_rcc.c:306:10:RCC_GetPLLOutputClock	7
+../Drivers/dstr/Src/stm32f407xx_rcc.c:374:6:RCC_MCOConfig	3
+../Drivers/dstr/Src/stm32f407xx_rcc.c:428:6:RCC_EnableCSS	1
+../Drivers/dstr/Src/stm32f407xx_rcc.c:442:6:RCC_DisableCSS	1
+../Drivers/dstr/Src/stm32f407xx_rcc.c:456:10:RCC_GetHCLKFreq	1
+../Drivers/dstr/Src/stm32f407xx_rcc.c:470:10:RCC_GetPCLK1Freq	6
+../Drivers/dstr/Src/stm32f407xx_rcc.c:528:10:RCC_GetPCLK2Freq	6
