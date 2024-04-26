@@ -1,9 +1,0 @@
-../Drivers/dstr/Src/stm32f407xx_flash.c:65:6:FLASH_Init	16	static
-../Drivers/dstr/Src/stm32f407xx_flash.c:96:6:DeInit	4	static
-../Drivers/dstr/Src/stm32f407xx_flash.c:127:6:FLASH_Unlock	4	static
-../Drivers/dstr/Src/stm32f407xx_flash.c:152:6:FLASH_Lock	4	static
-../Drivers/dstr/Src/stm32f407xx_flash.c:171:10:FLASH_EraseSector	24	static
-../Drivers/dstr/Src/stm32f407xx_flash.c:237:6:FLASH_Erase	32	static
-../Drivers/dstr/Src/stm32f407xx_flash.c:313:9:FLASH_Write	32	static
-../Drivers/dstr/Src/stm32f407xx_flash.c:390:6:FLASH_Read	32	static
-../Drivers/dstr/Src/stm32f407xx_flash.c:413:6:FLASH_Jump	16	static,ignoring_inline_asm

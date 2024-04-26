@@ -5882,7 +5882,6 @@ typedef enum
 #include <stm32f407xx_rcc.h>
 #include <stm32f407xx_gpio.h>
 #include <stm32f407xx_usart.h>
-#include <stm32f407xx_flash.h>
 #include <stm32f407xx_spi.h>
 #include <stm32f407xx_i2c.h>
 #include <stm32f407xx_tim.h>

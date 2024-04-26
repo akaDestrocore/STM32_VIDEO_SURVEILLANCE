@@ -5,7 +5,6 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Drivers/dstr/Src/stm32f407xx_flash.c \
 ../Drivers/dstr/Src/stm32f407xx_gpio.c \
 ../Drivers/dstr/Src/stm32f407xx_i2c.c \
 ../Drivers/dstr/Src/stm32f407xx_rcc.c \
@@ -16,7 +15,6 @@ C_SRCS += \
 ../Drivers/dstr/Src/stm32f407xx_usart.c 
 
 OBJS += \
-./Drivers/dstr/Src/stm32f407xx_flash.o \
 ./Drivers/dstr/Src/stm32f407xx_gpio.o \
 ./Drivers/dstr/Src/stm32f407xx_i2c.o \
 ./Drivers/dstr/Src/stm32f407xx_rcc.o \
@@ -27,7 +25,6 @@ OBJS += \
 ./Drivers/dstr/Src/stm32f407xx_usart.o 
 
 C_DEPS += \
-./Drivers/dstr/Src/stm32f407xx_flash.d \
 ./Drivers/dstr/Src/stm32f407xx_gpio.d \
 ./Drivers/dstr/Src/stm32f407xx_i2c.d \
 ./Drivers/dstr/Src/stm32f407xx_rcc.d \
@@ -45,7 +42,7 @@ Drivers/dstr/Src/%.o Drivers/dstr/Src/%.su Drivers/dstr/Src/%.cyclo: ../Drivers/
 clean: clean-Drivers-2f-dstr-2f-Src
 
 clean-Drivers-2f-dstr-2f-Src:
-	-$(RM) ./Drivers/dstr/Src/stm32f407xx_flash.cyclo ./Drivers/dstr/Src/stm32f407xx_flash.d ./Drivers/dstr/Src/stm32f407xx_flash.o ./Drivers/dstr/Src/stm32f407xx_flash.su ./Drivers/dstr/Src/stm32f407xx_gpio.cyclo ./Drivers/dstr/Src/stm32f407xx_gpio.d ./Drivers/dstr/Src/stm32f407xx_gpio.o ./Drivers/dstr/Src/stm32f407xx_gpio.su ./Drivers/dstr/Src/stm32f407xx_i2c.cyclo ./Drivers/dstr/Src/stm32f407xx_i2c.d ./Drivers/dstr/Src/stm32f407xx_i2c.o ./Drivers/dstr/Src/stm32f407xx_i2c.su ./Drivers/dstr/Src/stm32f407xx_rcc.cyclo ./Drivers/dstr/Src/stm32f407xx_rcc.d ./Drivers/dstr/Src/stm32f407xx_rcc.o ./Drivers/dstr/Src/stm32f407xx_rcc.su ./Drivers/dstr/Src/stm32f407xx_rtc.cyclo ./Drivers/dstr/Src/stm32f407xx_rtc.d ./Drivers/dstr/Src/stm32f407xx_rtc.o ./Drivers/dstr/Src/stm32f407xx_rtc.su ./Drivers/dstr/Src/stm32f407xx_spi.cyclo ./Drivers/dstr/Src/stm32f407xx_spi.d ./Drivers/dstr/Src/stm32f407xx_spi.o ./Drivers/dstr/Src/stm32f407xx_spi.su ./Drivers/dstr/Src/stm32f407xx_system.cyclo ./Drivers/dstr/Src/stm32f407xx_system.d ./Drivers/dstr/Src/stm32f407xx_system.o ./Drivers/dstr/Src/stm32f407xx_system.su ./Drivers/dstr/Src/stm32f407xx_tim.cyclo ./Drivers/dstr/Src/stm32f407xx_tim.d ./Drivers/dstr/Src/stm32f407xx_tim.o ./Drivers/dstr/Src/stm32f407xx_tim.su ./Drivers/dstr/Src/stm32f407xx_usart.cyclo ./Drivers/dstr/Src/stm32f407xx_usart.d ./Drivers/dstr/Src/stm32f407xx_usart.o ./Drivers/dstr/Src/stm32f407xx_usart.su
+	-$(RM) ./Drivers/dstr/Src/stm32f407xx_gpio.cyclo ./Drivers/dstr/Src/stm32f407xx_gpio.d ./Drivers/dstr/Src/stm32f407xx_gpio.o ./Drivers/dstr/Src/stm32f407xx_gpio.su ./Drivers/dstr/Src/stm32f407xx_i2c.cyclo ./Drivers/dstr/Src/stm32f407xx_i2c.d ./Drivers/dstr/Src/stm32f407xx_i2c.o ./Drivers/dstr/Src/stm32f407xx_i2c.su ./Drivers/dstr/Src/stm32f407xx_rcc.cyclo ./Drivers/dstr/Src/stm32f407xx_rcc.d ./Drivers/dstr/Src/stm32f407xx_rcc.o ./Drivers/dstr/Src/stm32f407xx_rcc.su ./Drivers/dstr/Src/stm32f407xx_rtc.cyclo ./Drivers/dstr/Src/stm32f407xx_rtc.d ./Drivers/dstr/Src/stm32f407xx_rtc.o ./Drivers/dstr/Src/stm32f407xx_rtc.su ./Drivers/dstr/Src/stm32f407xx_spi.cyclo ./Drivers/dstr/Src/stm32f407xx_spi.d ./Drivers/dstr/Src/stm32f407xx_spi.o ./Drivers/dstr/Src/stm32f407xx_spi.su ./Drivers/dstr/Src/stm32f407xx_system.cyclo ./Drivers/dstr/Src/stm32f407xx_system.d ./Drivers/dstr/Src/stm32f407xx_system.o ./Drivers/dstr/Src/stm32f407xx_system.su ./Drivers/dstr/Src/stm32f407xx_tim.cyclo ./Drivers/dstr/Src/stm32f407xx_tim.d ./Drivers/dstr/Src/stm32f407xx_tim.o ./Drivers/dstr/Src/stm32f407xx_tim.su ./Drivers/dstr/Src/stm32f407xx_usart.cyclo ./Drivers/dstr/Src/stm32f407xx_usart.d ./Drivers/dstr/Src/stm32f407xx_usart.o ./Drivers/dstr/Src/stm32f407xx_usart.su
 
 .PHONY: clean-Drivers-2f-dstr-2f-Src
 

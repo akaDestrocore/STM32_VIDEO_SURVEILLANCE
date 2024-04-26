@@ -3,10 +3,11 @@
 #include "fatfs.h"
 #include "libjpeg.h"
 #include "usb_host.h"
-#include <core_cm4.h>
 #include <usbh_platform.h>
 #include <simple_delay.h>
 #include <ov2640.h>
+
+
 
 /* Private variables ---------------------------------------------------------*/
 DCMI_HandleTypeDef hdcmi;

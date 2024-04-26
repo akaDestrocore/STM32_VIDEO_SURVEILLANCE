@@ -2739,7 +2739,7 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 #else
           /* Configure the PLLI2S division factor */
           /* PLLI2S_VCO Input  = PLL_SOURCE/PLLM */
-          if((RCC->PLLCFGR.reg & RCC_PLLCFGR_PLLSRC) == RCC_PLLSOURCE_HSE)
+          if((RCC->PLLCFGR.reg & (0x1UL << 22U)) == (0x1UL << 22U))
           {
             /* Get the I2S source clock value */
             vcoinput = (uint32_t)(HSE_VALUE / (uint32_t)(RCC->PLLCFGR.reg & RCC_PLLCFGR_PLLM));

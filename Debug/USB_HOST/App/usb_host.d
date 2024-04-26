@@ -10,7 +10,6 @@ USB_HOST/App/usb_host.o: ../USB_HOST/App/usb_host.c \
  D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_rcc.h \
  D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_gpio.h \
  D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_usart.h \
- D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_flash.h \
  D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_spi.h \
  D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_i2c.h \
  D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_tim.h \
@@ -62,7 +61,6 @@ D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/d
 D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_rcc.h:
 D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_gpio.h:
 D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_usart.h:
-D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_flash.h:
 D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_spi.h:
 D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_i2c.h:
 D:/Users/nabla/STM32CubeIDE/TI_like_workspace/STM32_VIDEO_SURVEILLANCE/Drivers/dstr/Inc/stm32f407xx_tim.h:

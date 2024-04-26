@@ -5,12 +5,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../Drivers/bsp/avi.c \
 ../Drivers/bsp/ov2640.c 
 
 OBJS += \
+./Drivers/bsp/avi.o \
 ./Drivers/bsp/ov2640.o 
 
 C_DEPS += \
+./Drivers/bsp/avi.d \
 ./Drivers/bsp/ov2640.d 
 
 
@@ -21,7 +24,7 @@ Drivers/bsp/%.o Drivers/bsp/%.su Drivers/bsp/%.cyclo: ../Drivers/bsp/%.c Drivers
 clean: clean-Drivers-2f-bsp
 
 clean-Drivers-2f-bsp:
-	-$(RM) ./Drivers/bsp/ov2640.cyclo ./Drivers/bsp/ov2640.d ./Drivers/bsp/ov2640.o ./Drivers/bsp/ov2640.su
+	-$(RM) ./Drivers/bsp/avi.cyclo ./Drivers/bsp/avi.d ./Drivers/bsp/avi.o ./Drivers/bsp/avi.su ./Drivers/bsp/ov2640.cyclo ./Drivers/bsp/ov2640.d ./Drivers/bsp/ov2640.o ./Drivers/bsp/ov2640.su
 
 .PHONY: clean-Drivers-2f-bsp
 

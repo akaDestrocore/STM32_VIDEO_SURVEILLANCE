@@ -117,7 +117,6 @@ HAL_StatusTypeDef HAL_HCD_Init(HCD_HandleTypeDef *hhcd)
   /* Check the HCD handle allocation */
   if (hhcd == NULL)
   {
-	  printf("Error 1\n");
     return HAL_ERROR;
   }
 
@@ -170,7 +169,6 @@ HAL_StatusTypeDef HAL_HCD_Init(HCD_HandleTypeDef *hhcd)
   /* Init the Core (common init.) */
   if (USB_CoreInit(hhcd->Instance, hhcd->Init) != HAL_OK)
   {
-	  printf("Error 2\n");
     hhcd->State = HAL_HCD_STATE_ERROR;
     return HAL_ERROR;
   }
@@ -178,7 +176,6 @@ HAL_StatusTypeDef HAL_HCD_Init(HCD_HandleTypeDef *hhcd)
   /* Force Host Mode */
   if (USB_SetCurrentMode(hhcd->Instance, USB_HOST_MODE) != HAL_OK)
   {
-	  printf("Error 3\n");
     hhcd->State = HAL_HCD_STATE_ERROR;
     return HAL_ERROR;
   }
@@ -186,7 +183,6 @@ HAL_StatusTypeDef HAL_HCD_Init(HCD_HandleTypeDef *hhcd)
   /* Init Host */
   if (USB_HostInit(hhcd->Instance, hhcd->Init) != HAL_OK)
   {
-	  printf("Error 4\n");
     hhcd->State = HAL_HCD_STATE_ERROR;
     return HAL_ERROR;
   }

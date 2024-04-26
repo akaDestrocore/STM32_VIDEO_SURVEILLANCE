@@ -173,7 +173,6 @@ void HAL_DCMI_MspInit(DCMI_HandleTypeDef* hdcmi)
 	  GPIO_InitStruct.GPIO_Config.PinNumber = 7;
 	  GPIO_Init(&GPIO_InitStruct);
 
-	  printf("Error test in msp\n");
 
     /* DCMI DMA Init */
     /* DCMI Init */
@@ -194,8 +193,6 @@ void HAL_DCMI_MspInit(DCMI_HandleTypeDef* hdcmi)
     {
       Error_Handler();
     }
-
-    printf("after DMA init in msp\n");
 
     __HAL_LINKDMA(hdcmi,DMA_Handle,hdma_dcmi);
 
