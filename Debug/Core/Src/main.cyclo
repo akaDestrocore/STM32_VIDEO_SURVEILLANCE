@@ -1,7 +1,7 @@
-../Core/Src/main.c:77:5:main	1
-../Core/Src/main.c:130:6:SystemClock_Config	1
-../Core/Src/main.c:185:6:PeriphCommonClock_Config	2
-../Core/Src/main.c:205:13:MX_DCMI_Init	2
-../Core/Src/main.c:236:13:MX_DMA_Init	1
-../Core/Src/main.c:254:13:MX_GPIO_Init	1
-../Core/Src/main.c:317:6:Error_Handler	1
+../Core/Src/main.c:26:5:main	1
+../Core/Src/main.c:59:6:SystemClock_Config	1
+../Core/Src/main.c:109:6:PeriphCommonClock_Config	2
+../Core/Src/main.c:122:13:DCMI_Config	2
+../Core/Src/main.c:138:13:DMA_Config	1
+../Core/Src/main.c:149:13:GPIO_Config	1
+../Core/Src/main.c:203:6:Error_Handler	1
