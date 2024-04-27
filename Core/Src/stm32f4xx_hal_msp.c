@@ -1,83 +1,19 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file         stm32f4xx_hal_msp.c
-  * @brief        This file provides code for the MSP Initialization
-  *               and de-Initialization codes.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <stm32f407xx_gpio.h>
 #include <stdio.h>
-/* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
 extern DMA_HandleTypeDef hdma_dcmi;
 
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN TD */
-
-/* USER CODE END TD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN Define */
-
-/* USER CODE END Define */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN Macro */
-
-/* USER CODE END Macro */
-
-/* Private variables ---------------------------------------------------------*/
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* External functions --------------------------------------------------------*/
-/* USER CODE BEGIN ExternalFunctions */
-
-/* USER CODE END ExternalFunctions */
-
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 /**
   * Initializes the Global MSP.
   */
 void HAL_MspInit(void)
 {
 
-  /* USER CODE BEGIN MspInit 0 */
-
-  /* USER CODE END MspInit 0 */
-
   RCC->APB2ENR.bit.syscfgen = SET;
   RCC->APB1ENR.bit.pwren = SET;
 
-  /* System interrupt init*/
-
-  /* USER CODE BEGIN MspInit 1 */
-
-  /* USER CODE END MspInit 1 */
 }
 
 /**
@@ -91,9 +27,7 @@ void HAL_DCMI_MspInit(DCMI_HandleTypeDef* hdcmi)
   GPIO_Handle_t GPIO_InitStruct = {0};
   if(hdcmi->Instance==DCMI)
   {
-  /* USER CODE BEGIN DCMI_MspInit 0 */
 
-  /* USER CODE END DCMI_MspInit 0 */
     /* Peripheral clock enable */
 	  RCC->AHB2ENR.bit.dcmien = SET;
 
@@ -116,61 +50,61 @@ void HAL_DCMI_MspInit(DCMI_HandleTypeDef* hdcmi)
     PE1     ------> DCMI_D3
     */
 	  GPIO_InitStruct.pGPIOx = GPIOE;
-	  GPIO_InitStruct.GPIO_Config.PinNumber = 4;
+	  GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_4;
 	  GPIO_InitStruct.GPIO_Config.PinMode = GPIO_MODE_AF;
 	  GPIO_InitStruct.GPIO_Config.PinOPType = GPIO_OUTPUT_PP;
 	  GPIO_InitStruct.GPIO_Config.PinPuPdControl = GPIO_PIN_NO_PUPD;
-	  GPIO_InitStruct.GPIO_Config.PinSpeed = 0;
+	  GPIO_InitStruct.GPIO_Config.PinSpeed = GPIO_SPEED_LOW;
 	  GPIO_InitStruct.GPIO_Config.PinAltFuncMode = 13;
 	  GPIO_Init(&GPIO_InitStruct);
 
-	  GPIO_InitStruct.GPIO_Config.PinNumber = 5;
+	  GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_5;
 	  GPIO_Init(&GPIO_InitStruct);
 
-	  GPIO_InitStruct.GPIO_Config.PinNumber = 6;
+	  GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_6;
 	  GPIO_Init(&GPIO_InitStruct);
 
-	  GPIO_InitStruct.GPIO_Config.PinNumber = 1;
+	  GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_1;
 	  GPIO_Init(&GPIO_InitStruct);
 
 
 	  GPIO_InitStruct.pGPIOx = GPIOA;
-	  GPIO_InitStruct.GPIO_Config.PinNumber = 4;
+	  GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_4;
 	  GPIO_InitStruct.GPIO_Config.PinMode = GPIO_MODE_AF;
 	  GPIO_InitStruct.GPIO_Config.PinOPType = GPIO_OUTPUT_PP;
 	  GPIO_InitStruct.GPIO_Config.PinPuPdControl = GPIO_PIN_NO_PUPD;
-	  GPIO_InitStruct.GPIO_Config.PinSpeed = 0;
+	  GPIO_InitStruct.GPIO_Config.PinSpeed = GPIO_SPEED_LOW;
 	  GPIO_InitStruct.GPIO_Config.PinAltFuncMode = 13;
 	  GPIO_Init(&GPIO_InitStruct);
 
-	  GPIO_InitStruct.GPIO_Config.PinNumber = 6;
+	  GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_6;
 	  GPIO_Init(&GPIO_InitStruct);
 
 	  GPIO_InitStruct.pGPIOx = GPIOC;
-	  GPIO_InitStruct.GPIO_Config.PinNumber = 6;
+	  GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_6;
 	  GPIO_InitStruct.GPIO_Config.PinMode = GPIO_MODE_AF;
 	  GPIO_InitStruct.GPIO_Config.PinOPType = GPIO_OUTPUT_PP;
 	  GPIO_InitStruct.GPIO_Config.PinPuPdControl = GPIO_PIN_NO_PUPD;
-	  GPIO_InitStruct.GPIO_Config.PinSpeed = 0;
+	  GPIO_InitStruct.GPIO_Config.PinSpeed = GPIO_SPEED_LOW;
 	  GPIO_InitStruct.GPIO_Config.PinAltFuncMode = 13;
 	  GPIO_Init(&GPIO_InitStruct);
 
-	  GPIO_InitStruct.GPIO_Config.PinNumber = 7;
+	  GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_7;
 	  GPIO_Init(&GPIO_InitStruct);
 
-	  GPIO_InitStruct.GPIO_Config.PinNumber = 8;
+	  GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_8;
 	  GPIO_Init(&GPIO_InitStruct);
 
 	  GPIO_InitStruct.pGPIOx = GPIOB;
-	  GPIO_InitStruct.GPIO_Config.PinNumber = 6;
+	  GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_6;
 	  GPIO_InitStruct.GPIO_Config.PinMode = GPIO_MODE_AF;
 	  GPIO_InitStruct.GPIO_Config.PinOPType = GPIO_OUTPUT_PP;
 	  GPIO_InitStruct.GPIO_Config.PinPuPdControl = GPIO_PIN_NO_PUPD;
-	  GPIO_InitStruct.GPIO_Config.PinSpeed = 0;
+	  GPIO_InitStruct.GPIO_Config.PinSpeed = GPIO_SPEED_LOW;
 	  GPIO_InitStruct.GPIO_Config.PinAltFuncMode = 13;
 	  GPIO_Init(&GPIO_InitStruct);
 
-	  GPIO_InitStruct.GPIO_Config.PinNumber = 7;
+	  GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_7;
 	  GPIO_Init(&GPIO_InitStruct);
 
 
@@ -199,9 +133,7 @@ void HAL_DCMI_MspInit(DCMI_HandleTypeDef* hdcmi)
     /* DCMI interrupt Init */
     HAL_NVIC_SetPriority(DCMI_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(DCMI_IRQn);
-  /* USER CODE BEGIN DCMI_MspInit 1 */
 
-  /* USER CODE END DCMI_MspInit 1 */
   }
 
 }
@@ -216,11 +148,8 @@ void HAL_DCMI_MspDeInit(DCMI_HandleTypeDef* hdcmi)
 {
   if(hdcmi->Instance==DCMI)
   {
-  /* USER CODE BEGIN DCMI_MspDeInit 0 */
-
-  /* USER CODE END DCMI_MspDeInit 0 */
     /* Peripheral clock disable */
-    __HAL_RCC_DCMI_CLK_DISABLE();
+	RCC->AHB2ENR.bit.dcmien = RESET;
 
     /**DCMI GPIO Configuration
     PE4     ------> DCMI_D4
@@ -235,26 +164,12 @@ void HAL_DCMI_MspDeInit(DCMI_HandleTypeDef* hdcmi)
     PB7     ------> DCMI_VSYNC
     PE1     ------> DCMI_D3
     */
-//    HAL_GPIO_DeInit(GPIOE, GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_1);
-//
-//    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4|GPIO_PIN_6);
-//
-//    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_8);
-//
-//    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_6|GPIO_PIN_7);
 
     /* DCMI DMA DeInit */
     HAL_DMA_DeInit(hdcmi->DMA_Handle);
 
     /* DCMI interrupt DeInit */
     HAL_NVIC_DisableIRQ(DCMI_IRQn);
-  /* USER CODE BEGIN DCMI_MspDeInit 1 */
-
-  /* USER CODE END DCMI_MspDeInit 1 */
   }
 
 }
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */

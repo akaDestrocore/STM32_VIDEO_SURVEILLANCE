@@ -176,7 +176,7 @@ typedef struct
 /** @defgroup RCC_PLL_Clock_Source PLL Clock Source
   * @{
   */
-#define RCC_PLLSOURCE_HSI                RCC_PLLCFGR_PLLSRC_HSI
+#define RCC_PLLSOURCE_HSI                0x00000000U
 #define RCC_PLLSOURCE_HSE                RCC_PLLCFGR_PLLSRC_HSE
 /**
   * @}
@@ -185,10 +185,10 @@ typedef struct
 /** @defgroup RCC_System_Clock_Type System Clock Type
   * @{
   */
-//#define RCC_CLOCKTYPE_SYSCLK             0x00000001U
-//#define RCC_CLOCKTYPE_HCLK               0x00000002U
-//#define RCC_CLOCKTYPE_PCLK1              0x00000004U
-//#define RCC_CLOCKTYPE_PCLK2              0x00000008U
+#define RCC_CLOCKTYPE_SYSCLK             0x00000001U
+#define RCC_CLOCKTYPE_HCLK               0x00000002U
+#define RCC_CLOCKTYPE_PCLK1              0x00000004U
+#define RCC_CLOCKTYPE_PCLK2              0x00000008U
 /**
   * @}
   */
@@ -198,10 +198,10 @@ typedef struct
   *           STM32F446xx devices.
   * @{
   */
-//#define RCC_SYSCLKSOURCE_HSI             RCC_CFGR_SW_HSI
-//#define RCC_SYSCLKSOURCE_HSE             RCC_CFGR_SW_HSE
-//#define RCC_SYSCLKSOURCE_PLLCLK          RCC_CFGR_SW_PLL
-//#define RCC_SYSCLKSOURCE_PLLRCLK         ((uint32_t)(RCC_CFGR_SW_0 | RCC_CFGR_SW_1))
+#define RCC_SYSCLKSOURCE_HSI             0x00000000U
+#define RCC_SYSCLKSOURCE_HSE             0x00000001U
+#define RCC_SYSCLKSOURCE_PLLCLK          0x00000002U
+#define RCC_SYSCLKSOURCE_PLLRCLK         ((uint32_t)((0x1UL << (0U)) | (0x2UL << (0U))))
 /**
   * @}
   */

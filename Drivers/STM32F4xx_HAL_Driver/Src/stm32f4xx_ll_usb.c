@@ -41,6 +41,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 #include <core_cm4.h>
+#include <simple_delay.h>
 
 /** @addtogroup STM32F4xx_LL_USB_DRIVER
   * @{
@@ -259,7 +260,7 @@ HAL_StatusTypeDef USB_SetCurrentMode(USB_OTG_GlobalTypeDef *USBx, USB_OTG_ModeTy
 
     do
     {
-      HAL_Delay(10U);
+      delay_ms(10U);
       ms += 10U;
     } while ((USB_GetMode(USBx) != (uint32_t)USB_HOST_MODE) && (ms < HAL_USB_CURRENT_MODE_MAX_DELAY_MS));
   }
@@ -269,7 +270,7 @@ HAL_StatusTypeDef USB_SetCurrentMode(USB_OTG_GlobalTypeDef *USBx, USB_OTG_ModeTy
 
     do
     {
-      HAL_Delay(10U);
+    	delay_ms(10U);
       ms += 10U;
     } while ((USB_GetMode(USBx) != (uint32_t)USB_DEVICE_MODE) && (ms < HAL_USB_CURRENT_MODE_MAX_DELAY_MS));
   }

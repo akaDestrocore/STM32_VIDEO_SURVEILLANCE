@@ -66,6 +66,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
+extern uint32_t SystemCoreClock;
 extern const uint8_t AHBPrescTable[16];
 extern const uint8_t APBPrescTable[8];
 

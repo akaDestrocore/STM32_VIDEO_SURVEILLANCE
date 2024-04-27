@@ -46,7 +46,7 @@ static uint8_t RTC_ConvertDate(uint8_t date);
 /*																										*/
 /* @return				- none																			*/
 /*																										*/
-/* @Note				- none																			*/
+/* @Note					- none																			*/
 /********************************************************************************************************/
 void RTC_ClockControl(RTC_Clock_State_t state)
 {
@@ -78,12 +78,16 @@ void RTC_ClockControl(RTC_Clock_State_t state)
 /*																										*/
 /* @return				- none																			*/
 /*																										*/
-/* @Note				- none																			*/
+/* @Note					- none																			*/
 /********************************************************************************************************/
 void RTC_Init(RTC_Handle_t *pRTCHandle)
 {
+	PWR->CR.bit.dbp = SET;
+
 	//enable RTC clock
 	RTC_ClockControl(RTC_ENABLE);
+
+	RCC->BDCR.bit.rtcsel = 2; //LSI
 
 	//Disable RTC registers write protection
 	RTC->WPR.bit.key = 0xCA;
@@ -126,7 +130,7 @@ void RTC_Init(RTC_Handle_t *pRTCHandle)
 /*																										*/
 /* @return				- none																			*/
 /*																										*/
-/* @Note				- 23 hours, 59 minutes, 59 seconds												*/
+/* @Note					- 23 hours, 59 minutes, 59 seconds												*/
 /********************************************************************************************************/
 void RTC_SetTime(RTC_Handle_t *pRTCHandle)
 {
@@ -170,7 +174,7 @@ void RTC_SetTime(RTC_Handle_t *pRTCHandle)
 /*																										*/
 /* @return				- none																			*/
 /*																										*/
-/* @Note				- none																			*/
+/* @Note					- none																			*/
 /********************************************************************************************************/
 void RTC_SetDate(RTC_Handle_t * pRTCHandle)
 {
@@ -216,7 +220,7 @@ void RTC_SetDate(RTC_Handle_t * pRTCHandle)
 /*																										*/
 /* @return				- none																			*/
 /*																										*/
-/* @Note				- none																			*/
+/* @Note					- none																			*/
 /********************************************************************************************************/
 void RTC_GetTime(RTC_Handle_t * pRTCHandle, Current_Date_Handle_t* pCurrentDateHandle)
 {

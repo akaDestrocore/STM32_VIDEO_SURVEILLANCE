@@ -25,6 +25,7 @@
 
 #include <stm32f407xx_i2c.h>
 #include <core_cm4.h>
+#include <stm32f4xx_hal.h>
 
 
 static void I2C_GenerateStartCondition(I2C_RegDef_t *pI2Cx);
@@ -185,7 +186,8 @@ void I2C_Init(I2C_Handle_t *pI2CHandle)
 
 	//configure the FREQ field of CR2
 	temp = 0;
-	temp |= RCC_GetPCLK1Freq() /1000000U;
+//	temp |= RCC_GetPCLK1Freq() /1000000U;
+	temp |= HAL_RCC_GetPCLK1Freq() / 1000000U;
 	pI2CHandle->pI2Cx->CR2.bit.freq = temp;
 
    //program the device own address
@@ -202,7 +204,8 @@ void I2C_Init(I2C_Handle_t *pI2CHandle)
 	{
 		//mode is standard mode
 		//CCR = Tscl/(2*Tpclk1) => CCR = f(pclk1)/[2*f(scl)]
-		CCR_temp.bit.ccr = (RCC_GetPCLK1Freq() / ( 2 * pI2CHandle->I2C_Config.I2C_SCLSpeed));
+//		CCR_temp.bit.ccr = (RCC_GetPCLK1Freq() / ( 2 * pI2CHandle->I2C_Config.I2C_SCLSpeed));
+		CCR_temp.bit.ccr = (HAL_RCC_GetPCLK1Freq() / ( 2 * pI2CHandle->I2C_Config.I2C_SCLSpeed));
 	}
 	else
 	{
@@ -211,11 +214,13 @@ void I2C_Init(I2C_Handle_t *pI2CHandle)
 		CCR_temp.bit.duty = pI2CHandle->I2C_Config.I2C_FMDutyCycle;
 		if(I2C_FM_DUTY_2 == pI2CHandle->I2C_Config.I2C_FMDutyCycle)
 		{
-			CCR_temp.bit.ccr = (RCC_GetPCLK1Freq() / ( 3 * pI2CHandle->I2C_Config.I2C_SCLSpeed));
+//			CCR_temp.bit.ccr = (RCC_GetPCLK1Freq() / ( 3 * pI2CHandle->I2C_Config.I2C_SCLSpeed));
+			CCR_temp.bit.ccr = (HAL_RCC_GetPCLK1Freq() / ( 3 * pI2CHandle->I2C_Config.I2C_SCLSpeed));
 		}
 		else
 		{
-			CCR_temp.bit.ccr = (RCC_GetPCLK1Freq() / ( 25 * pI2CHandle->I2C_Config.I2C_SCLSpeed));
+//			CCR_temp.bit.ccr = (RCC_GetPCLK1Freq() / ( 25 * pI2CHandle->I2C_Config.I2C_SCLSpeed));
+			CCR_temp.bit.ccr = (HAL_RCC_GetPCLK1Freq() / ( 25 * pI2CHandle->I2C_Config.I2C_SCLSpeed));
 		}
 	}
 	pI2CHandle->pI2Cx->CCR.reg = CCR_temp.reg;
@@ -224,13 +229,15 @@ void I2C_Init(I2C_Handle_t *pI2CHandle)
 	if(pI2CHandle->I2C_Config.I2C_SCLSpeed <= I2C_SCL_SPEED_STANDARD)
 	{
 		//mode is standard mode
-		trise = (RCC_GetPCLK1Freq() /1000000U) + 1 ;
+//		trise = (RCC_GetPCLK1Freq() /1000000U) + 1 ;
+		trise = (HAL_RCC_GetPCLK1Freq() /1000000U) + 1 ;
 
 	}
 	else
 	{
 		//mode is fast mode
-		trise = ( (RCC_GetPCLK1Freq() * 300) / 1000000000U ) + 1;
+//		trise = ( (RCC_GetPCLK1Freq() * 300) / 1000000000U ) + 1;
+		trise = ( (HAL_RCC_GetPCLK1Freq() * 300) / 1000000000U ) + 1;
 
 	}
 
@@ -240,7 +247,7 @@ void I2C_Init(I2C_Handle_t *pI2CHandle)
 	I2C_PeripheralControl(pI2CHandle->pI2Cx, ENABLE);
 
 	//ACK control bit set
-	I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_ENABLE);
+	I2C_ManageAcking(pI2CHandle->pI2Cx, pI2CHandle->I2C_Config.I2C_AckControl);
 }
 
 

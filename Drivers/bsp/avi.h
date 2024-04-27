@@ -1,7 +1,7 @@
 #ifndef INC_AVI_H_
 #define INC_AVI_H_
-#include "main.h"
-#include "fatfs.h"
+#include <main.h>
+#include <fatfs.h>
 
 enum avi_resolution
 {

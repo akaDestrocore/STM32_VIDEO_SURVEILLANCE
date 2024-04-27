@@ -32,6 +32,7 @@
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 extern FATFS fs;
+extern volatile uint8_t begin_rec;
 /* USER CODE END PV */
 
 /* USER CODE BEGIN PFP */
@@ -118,6 +119,7 @@ static void USBH_UserProcess  (USBH_HandleTypeDef *phost, uint8_t id)
   Appli_state = APPLICATION_READY;
   f_mount(&fs, USBHPath, 1);
   f_mkdir("0:/Video");
+  begin_rec = 1;
   break;
 
   case HOST_USER_CONNECTION:

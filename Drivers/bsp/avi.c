@@ -1,12 +1,12 @@
 #define JPEG_INTERNALS
-#include "jinclude.h"
-#include "jpeglib.h"
+#include <jinclude.h>
+#include <jpeglib.h>
 
-#include "avi.h"
-#include "stdlib.h"
-#include "ov2640.h"
-#include "string.h"
-#include "unistd.h"
+#include <avi.h>
+#include <stdlib.h>
+#include <ov2640.h>
+#include <string.h>
+#include <unistd.h>
 
 #define MAX_AVI_BUFF		20480 //20k for motion jpeg
 #define MAX_PICTURE_BUFF	92160 //90k for stikk jepg

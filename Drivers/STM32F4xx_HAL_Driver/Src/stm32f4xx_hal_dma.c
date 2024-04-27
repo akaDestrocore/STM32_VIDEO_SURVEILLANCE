@@ -95,6 +95,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+extern uint32_t SystemCoreClock;
 
 /** @addtogroup STM32F4xx_HAL_Driver
   * @{

@@ -1,4 +1,0 @@
-../Drivers/CMSIS/Include/core_cm4.h:1815:20:__NVIC_SetPriority	16	static
-../Drivers/CMSIS/Include/core_cm4.h:2023:24:SysTick_Config	16	static
-../Drivers/dstr/Src/stm32f407xx_system.c:41:6:SysTick_Init	8	static
-../Drivers/dstr/Src/stm32f407xx_system.c:69:10:GetTick	4	static

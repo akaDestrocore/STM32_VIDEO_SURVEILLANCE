@@ -76,23 +76,25 @@ void HAL_HCD_MspInit(HCD_HandleTypeDef* hcdHandle)
     PA12     ------> USB_OTG_FS_DP
     */
     GPIO_InitStruct.pGPIOx = GPIOA;
-    GPIO_InitStruct.GPIO_Config.PinNumber = 9;
+    GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_9;
     GPIO_InitStruct.GPIO_Config.PinMode = GPIO_MODE_INPUT;
     GPIO_InitStruct.GPIO_Config.PinPuPdControl = GPIO_PIN_NO_PUPD;
     GPIO_Init(&GPIO_InitStruct);
 
-    GPIO_InitStruct.GPIO_Config.PinNumber = 11;
+    GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_11;
 	GPIO_InitStruct.GPIO_Config.PinMode = GPIO_MODE_AF;
 	GPIO_InitStruct.GPIO_Config.PinOPType = GPIO_OUTPUT_PP;
 	GPIO_InitStruct.GPIO_Config.PinPuPdControl = GPIO_PIN_NO_PUPD;
-	GPIO_InitStruct.GPIO_Config.PinSpeed = 3;
-	GPIO_InitStruct.GPIO_Config.PinAltFuncMode = 10;
+	GPIO_InitStruct.GPIO_Config.PinSpeed = GPIO_SPEED_HIGH;
+	GPIO_InitStruct.GPIO_Config.PinAltFuncMode = 0xA;
     GPIO_Init(&GPIO_InitStruct);
 
-    GPIO_InitStruct.GPIO_Config.PinNumber = 12;
+    GPIO_InitStruct.GPIO_Config.PinNumber = GPIO_PIN_12;
     GPIO_Init(&GPIO_InitStruct);
+
     /* Peripheral clock enable */
     RCC->AHB2ENR.bit.otgfsen = SET;
+    RCC->APB2ENR.bit.syscfgen = SET;
 
     /* Peripheral interrupt init */
     HAL_NVIC_SetPriority(OTG_FS_IRQn, 0, 0);

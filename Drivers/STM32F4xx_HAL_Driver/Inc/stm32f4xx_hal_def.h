@@ -66,6 +66,25 @@ volatile uint32_t DIEPTXF[0x0F];        /*!< dev Periodic Transmit FIFO         
 /*                                                                            */
 /******************************************************************************/
 /********************  Bit definition for RCC_CR register  ********************/
+#define RCC_CR_HSEON_Pos                   (16U)
+#define RCC_CR_HSEON_Msk                   (0x1UL << RCC_CR_HSEON_Pos)          /*!< 0x00010000 */
+#define RCC_CR_HSEON                       RCC_CR_HSEON_Msk
+#define RCC_CR_HSERDY_Pos                  (17U)
+#define RCC_CR_HSERDY_Msk                  (0x1UL << RCC_CR_HSERDY_Pos)         /*!< 0x00020000 */
+#define RCC_CR_HSERDY                      RCC_CR_HSERDY_Msk
+#define RCC_CR_HSEBYP_Pos                  (18U)
+#define RCC_CR_HSEBYP_Msk                  (0x1UL << RCC_CR_HSEBYP_Pos)         /*!< 0x00040000 */
+#define RCC_CR_HSEBYP                      RCC_CR_HSEBYP_Msk
+#define RCC_CR_CSSON_Pos                   (19U)
+#define RCC_CR_CSSON_Msk                   (0x1UL << RCC_CR_CSSON_Pos)          /*!< 0x00080000 */
+#define RCC_CR_CSSON                       RCC_CR_CSSON_Msk
+#define RCC_CR_PLLON_Pos                   (24U)
+#define RCC_CR_PLLON_Msk                   (0x1UL << RCC_CR_PLLON_Pos)          /*!< 0x01000000 */
+#define RCC_CR_PLLON                       RCC_CR_PLLON_Msk
+#define RCC_CR_PLLRDY_Pos                  (25U)
+#define RCC_CR_PLLRDY_Msk                  (0x1UL << RCC_CR_PLLRDY_Pos)         /*!< 0x02000000 */
+#define RCC_CR_PLLRDY                      RCC_CR_PLLRDY_Msk
+
 #define RCC_CR_HSION_Pos                   (0U)
 #define RCC_CR_HSION_Msk                   (0x1UL << RCC_CR_HSION_Pos)          /*!< 0x00000001 */
 #define RCC_CR_HSION                       RCC_CR_HSION_Msk
@@ -93,7 +112,6 @@ volatile uint32_t DIEPTXF[0x0F];        /*!< dev Periodic Transmit FIFO         
 #define RCC_CR_HSICAL_5                    (0x20UL << RCC_CR_HSICAL_Pos)        /*!< 0x00002000 */
 #define RCC_CR_HSICAL_6                    (0x40UL << RCC_CR_HSICAL_Pos)        /*!< 0x00004000 */
 #define RCC_CR_HSICAL_7                    (0x80UL << RCC_CR_HSICAL_Pos)        /*!< 0x00008000 */
-
 
 /*
  * @brief Specific device feature definitions (not present on all devices in the STM32F4 series)
@@ -133,8 +151,8 @@ volatile uint32_t DIEPTXF[0x0F];        /*!< dev Periodic Transmit FIFO         
 #define RCC_PLLCFGR_PLLSRC                 RCC_PLLCFGR_PLLSRC_Msk
 #define RCC_PLLCFGR_PLLSRC_HSE_Pos         (22U)
 #define RCC_PLLCFGR_PLLSRC_HSE_Msk         (0x1UL << RCC_PLLCFGR_PLLSRC_HSE_Pos) /*!< 0x00400000 */
-//#define RCC_PLLCFGR_PLLSRC_HSE             RCC_PLLCFGR_PLLSRC_HSE_Msk
-//#define RCC_PLLCFGR_PLLSRC_HSI             0x00000000U
+#define RCC_PLLCFGR_PLLSRC_HSE             RCC_PLLCFGR_PLLSRC_HSE_Msk
+#define RCC_PLLCFGR_PLLSRC_HSI             0x00000000U
 
 #define RCC_PLLCFGR_PLLQ_Pos               (24U)
 #define RCC_PLLCFGR_PLLQ_Msk               (0xFUL << RCC_PLLCFGR_PLLQ_Pos)      /*!< 0x0F000000 */
@@ -172,15 +190,15 @@ volatile uint32_t DIEPTXF[0x0F];        /*!< dev Periodic Transmit FIFO         
 #define RCC_CFGR_HPRE_2                    (0x4UL << RCC_CFGR_HPRE_Pos)         /*!< 0x00000040 */
 #define RCC_CFGR_HPRE_3                    (0x8UL << RCC_CFGR_HPRE_Pos)         /*!< 0x00000080 */
 
-//#define RCC_CFGR_HPRE_DIV1                 0x00000000U                         /*!< SYSCLK not divided    */
-//#define RCC_CFGR_HPRE_DIV2                 0x00000080U                         /*!< SYSCLK divided by 2   */
-//#define RCC_CFGR_HPRE_DIV4                 0x00000090U                         /*!< SYSCLK divided by 4   */
-//#define RCC_CFGR_HPRE_DIV8                 0x000000A0U                         /*!< SYSCLK divided by 8   */
-//#define RCC_CFGR_HPRE_DIV16                0x000000B0U                         /*!< SYSCLK divided by 16  */
-//#define RCC_CFGR_HPRE_DIV64                0x000000C0U                         /*!< SYSCLK divided by 64  */
-//#define RCC_CFGR_HPRE_DIV128               0x000000D0U                         /*!< SYSCLK divided by 128 */
-//#define RCC_CFGR_HPRE_DIV256               0x000000E0U                         /*!< SYSCLK divided by 256 */
-//#define RCC_CFGR_HPRE_DIV512               0x000000F0U                         /*!< SYSCLK divided by 512 */
+#define RCC_CFGR_HPRE_DIV1                 0x00000000U                         /*!< SYSCLK not divided    */
+#define RCC_CFGR_HPRE_DIV2                 0x00000080U                         /*!< SYSCLK divided by 2   */
+#define RCC_CFGR_HPRE_DIV4                 0x00000090U                         /*!< SYSCLK divided by 4   */
+#define RCC_CFGR_HPRE_DIV8                 0x000000A0U                         /*!< SYSCLK divided by 8   */
+#define RCC_CFGR_HPRE_DIV16                0x000000B0U                         /*!< SYSCLK divided by 16  */
+#define RCC_CFGR_HPRE_DIV64                0x000000C0U                         /*!< SYSCLK divided by 64  */
+#define RCC_CFGR_HPRE_DIV128               0x000000D0U                         /*!< SYSCLK divided by 128 */
+#define RCC_CFGR_HPRE_DIV256               0x000000E0U                         /*!< SYSCLK divided by 256 */
+#define RCC_CFGR_HPRE_DIV512               0x000000F0U                         /*!< SYSCLK divided by 512 */
 
 #define RCC_CFGR_SWS                       (0x3UL << 2U)
 #define RCC_CFGR_SWS_HSI                   0x00000000U                         /*!< HSI oscillator used as system clock        */
@@ -256,15 +274,15 @@ volatile uint32_t DIEPTXF[0x0F];        /*!< dev Periodic Transmit FIFO         
 #define RCC_CFGR_MCO2_0                    (0x1UL << RCC_CFGR_MCO2_Pos)         /*!< 0x40000000 */
 #define RCC_CFGR_MCO2_1                    (0x2UL << RCC_CFGR_MCO2_Pos)         /*!< 0x80000000 */
 
-//#define RCC_CFGR_HPRE_DIV1                 0x00000000U                         /*!< SYSCLK not divided    */
-//#define RCC_CFGR_HPRE_DIV2                 0x00000080U                         /*!< SYSCLK divided by 2   */
-//#define RCC_CFGR_HPRE_DIV4                 0x00000090U                         /*!< SYSCLK divided by 4   */
-//#define RCC_CFGR_HPRE_DIV8                 0x000000A0U                         /*!< SYSCLK divided by 8   */
-//#define RCC_CFGR_HPRE_DIV16                0x000000B0U                         /*!< SYSCLK divided by 16  */
-//#define RCC_CFGR_HPRE_DIV64                0x000000C0U                         /*!< SYSCLK divided by 64  */
-//#define RCC_CFGR_HPRE_DIV128               0x000000D0U                         /*!< SYSCLK divided by 128 */
-//#define RCC_CFGR_HPRE_DIV256               0x000000E0U                         /*!< SYSCLK divided by 256 */
-//#define RCC_CFGR_HPRE_DIV512               0x000000F0U                         /*!< SYSCLK divided by 512 */
+#define RCC_CFGR_HPRE_DIV1                 0x00000000U                         /*!< SYSCLK not divided    */
+#define RCC_CFGR_HPRE_DIV2                 0x00000080U                         /*!< SYSCLK divided by 2   */
+#define RCC_CFGR_HPRE_DIV4                 0x00000090U                         /*!< SYSCLK divided by 4   */
+#define RCC_CFGR_HPRE_DIV8                 0x000000A0U                         /*!< SYSCLK divided by 8   */
+#define RCC_CFGR_HPRE_DIV16                0x000000B0U                         /*!< SYSCLK divided by 16  */
+#define RCC_CFGR_HPRE_DIV64                0x000000C0U                         /*!< SYSCLK divided by 64  */
+#define RCC_CFGR_HPRE_DIV128               0x000000D0U                         /*!< SYSCLK divided by 128 */
+#define RCC_CFGR_HPRE_DIV256               0x000000E0U                         /*!< SYSCLK divided by 256 */
+#define RCC_CFGR_HPRE_DIV512               0x000000F0U                         /*!< SYSCLK divided by 512 */
 
 /********************  Bit definition for RCC_CIR register  *******************/
 #define RCC_CIR_LSIRDYF_Pos                (0U)
@@ -989,6 +1007,58 @@ volatile uint32_t DIEPTXF[0x0F];        /*!< dev Periodic Transmit FIFO         
 #define RCC_PLLI2SCFGR_PLLI2SN_6           (0x040UL << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00001000 */
 #define RCC_PLLI2SCFGR_PLLI2SN_7           (0x080UL << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00002000 */
 #define RCC_PLLI2SCFGR_PLLI2SN_8           (0x100UL << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00004000 */
+
+#define RCC_MCODIV_4	((uint32_t)(0x2UL << (24U)) | (0x4UL << (24U)))
+
+#define RCC_HCLK_DIV1                    0x00000000U
+#define RCC_HCLK_DIV2                    0x00001000U
+#define RCC_HCLK_DIV4                    0x00001400U
+#define RCC_HCLK_DIV8                    0x00001800U
+#define RCC_HCLK_DIV16                   0x00001C00U
+
+#define RCC_HSE_OFF                      0x00000000U
+#define RCC_HSE_ON                       (0x1UL << 16U)
+#define RCC_HSE_BYPASS                   ((uint32_t)((0x1UL << (18U)) | (0x1UL << (16U))))
+
+#define RCC_OSCILLATORTYPE_NONE            0x00000000U
+#define RCC_OSCILLATORTYPE_HSE             0x00000001U
+#define RCC_OSCILLATORTYPE_HSI             0x00000002U
+#define RCC_OSCILLATORTYPE_LSE             0x00000004U
+#define RCC_OSCILLATORTYPE_LSI             0x00000008U
+
+#define RCC_HSI_OFF                      ((uint8_t)0x00)
+#define RCC_HSI_ON                       ((uint8_t)0x01)
+
+#define RCC_LSI_OFF                      ((uint8_t)0x00)
+#define RCC_LSI_ON                       ((uint8_t)0x01)
+
+#define RCC_LSE_OFF                    0x00000000U
+#define RCC_LSE_ON                     RCC_BDCR_LSEON
+#define RCC_LSE_BYPASS                 ((uint32_t)((0x1UL << (2U)) | (0x1UL << (0U))))
+
+#define RCC_PLL_NONE                      ((uint8_t)0x00)
+#define RCC_PLL_OFF                       ((uint8_t)0x01)
+#define RCC_PLL_ON                        ((uint8_t)0x02)
+
+#define RCC_CLOCKTYPE_SYSCLK             0x00000001U
+#define RCC_CLOCKTYPE_HCLK               0x00000002U
+#define RCC_CLOCKTYPE_PCLK1              0x00000004U
+#define RCC_CLOCKTYPE_PCLK2              0x00000008U
+
+#define RCC_MCO1                         0x00000000U
+#define RCC_MCO2                         0x00000001U
+
+#define RCC_SYSCLK_DIV1                  RCC_CFGR_HPRE_DIV1
+#define RCC_SYSCLK_DIV2                  RCC_CFGR_HPRE_DIV2
+#define RCC_SYSCLK_DIV4                  RCC_CFGR_HPRE_DIV4
+#define RCC_SYSCLK_DIV8                  RCC_CFGR_HPRE_DIV8
+#define RCC_SYSCLK_DIV16                 RCC_CFGR_HPRE_DIV16
+#define RCC_SYSCLK_DIV64                 RCC_CFGR_HPRE_DIV64
+#define RCC_SYSCLK_DIV128                RCC_CFGR_HPRE_DIV128
+#define RCC_SYSCLK_DIV256                RCC_CFGR_HPRE_DIV256
+#define RCC_SYSCLK_DIV512                RCC_CFGR_HPRE_DIV512
+
+
 
 /******************************************************************************/
 /*                                                                            */
@@ -5105,7 +5175,7 @@ typedef struct
 #define EXTI_PR_PR22_Msk          (0x1UL << EXTI_PR_PR22_Pos)                   /*!< 0x00400000 */
 #define EXTI_PR_PR22              EXTI_PR_PR22_Msk                             /*!< Pending bit for line 22 */
 
-
+#define RCC_MCO2SOURCE_PLLI2SCLK	(0x1UL << 30U)
 
 typedef struct
 {
