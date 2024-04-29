@@ -2,9 +2,9 @@
 ../Drivers/dstr/Src/stm32f407xx_rtc.c:83:6:RTC_Init	16	static
 ../Drivers/dstr/Src/stm32f407xx_rtc.c:135:6:RTC_SetTime	24	static
 ../Drivers/dstr/Src/stm32f407xx_rtc.c:179:6:RTC_SetDate	24	static
-../Drivers/dstr/Src/stm32f407xx_rtc.c:225:6:RTC_GetTime	24	static
-../Drivers/dstr/Src/stm32f407xx_rtc.c:257:6:RTC_GetDate	24	static
-../Drivers/dstr/Src/stm32f407xx_rtc.c:355:6:RTC_SetAlarm_IT	32	static
-../Drivers/dstr/Src/stm32f407xx_rtc.c:417:16:RTC_ConvertYear	24	static
-../Drivers/dstr/Src/stm32f407xx_rtc.c:426:16:RTC_ConvertMonth	24	static
-../Drivers/dstr/Src/stm32f407xx_rtc.c:438:16:RTC_ConvertDate	24	static
+../Drivers/dstr/Src/stm32f407xx_rtc.c:226:6:RTC_GetTime	24	static
+../Drivers/dstr/Src/stm32f407xx_rtc.c:258:6:RTC_GetDate	24	static
+../Drivers/dstr/Src/stm32f407xx_rtc.c:356:6:RTC_SetAlarm_IT	32	static
+../Drivers/dstr/Src/stm32f407xx_rtc.c:418:16:RTC_ConvertYear	24	static
+../Drivers/dstr/Src/stm32f407xx_rtc.c:427:16:RTC_ConvertMonth	24	static
+../Drivers/dstr/Src/stm32f407xx_rtc.c:439:16:RTC_ConvertDate	24	static

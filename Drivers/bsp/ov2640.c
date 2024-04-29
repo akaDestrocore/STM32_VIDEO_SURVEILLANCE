@@ -188,6 +188,7 @@ void CAMERA_IO_Write(uint8_t deviceAddr, uint8_t reg, uint8_t value)
 {
 	I2C_Mem_Write(&hi2c1, deviceAddr, reg, I2C_MEMADD_SIZE_8BIT, &value, 1);
 }
+
 void CAMERA_Delay(uint32_t Delay)
 {
 	HAL_Delay(Delay);

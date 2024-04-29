@@ -24,6 +24,7 @@
 #include "usbh_core.h"
 #include "usbh_msc.h"
 #include <stdio.h>
+#include <ctype.h>
 
 /* USER CODE BEGIN Includes */
 
@@ -118,7 +119,7 @@ static void USBH_UserProcess  (USBH_HandleTypeDef *phost, uint8_t id)
   case HOST_USER_CLASS_ACTIVE:
   Appli_state = APPLICATION_READY;
   f_mount(&fs, USBHPath, 1);
-  f_mkdir("0:/Video");
+  f_mkdir("0:/VIDEO");
   begin_rec = 1;
   break;
 

@@ -466,6 +466,7 @@ FRESULT start_output_mjpeg_avi(FIL *file, DCMI_HandleTypeDef *hdcmi, uint8_t fps
 
 	return res;
 }
+
 void stop_output_mjpeg_avi(FIL *file, FIL* temp_idx1)
 {
 	UINT br;

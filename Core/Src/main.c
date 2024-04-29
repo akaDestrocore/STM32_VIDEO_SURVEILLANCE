@@ -141,7 +141,7 @@ void delete_oldest_video(void)
 
 void check_delete_oldest_video(void)
 {
-    if (video_count >= MAX_VIDEOS)
+    if (video_count >= (MAX_VIDEOS+1))
     {
         delete_oldest_video();
     }
@@ -163,7 +163,7 @@ void rec_begin(void)
 	char fn[64];
 	memset(fn, 0, 64);
 
-	sprintf(fn, "0:/Video/%02dy%02dm%02dd_REC_%02d_%02d_%02d.avi",
+	sprintf(fn, "0:/VIDEO/%02dy%02dm%02dd_REC_%02d_%02d_%02d.avi",
 			sCurrent.Date.year, sCurrent.Date.month, sCurrent.Date.date, sCurrent.Time.hour, sCurrent.Time.minute, sCurrent.Time.second);
 	res = f_open(&file, fn, FA_CREATE_ALWAYS|FA_WRITE);
 	if (res==FR_OK)
@@ -186,13 +186,13 @@ int main(void)
 
 	// peripheral initialization
 	TIM1_Config();
+	MX_USB_HOST_Init();
 	GPIO_Config();
 	DMA_Config();
 	MX_FATFS_Init();
 	DCMI_Config();
 	I2C_Config();
 	MX_LIBJPEG_Init();
-	MX_USB_HOST_Init();
 	RTC_Config();
 
 
@@ -319,9 +319,6 @@ static void GPIO_Config(void)
 	// make sure PC0 is low; this pin is used for Drive_VBUS_FS
 	GPIO_WritePin(GPIOC, GPIO_PIN_0, RESET);
 
-	// set camera RESET pin to disable reset
-	GPIO_WritePin(GPIOD, GPIO_PIN_0, SET);
-
 	// default PWDN pin state when camera is working; you may connect camera's PWDN pin to GND as well
 	GPIO_WritePin(GPIOC, CAMERA_PWDN_Pin, RESET);
 
@@ -399,20 +396,18 @@ static void RTC_Config(void)
 	hrtc.RTC_Config.RTC_HourFormat = RTC_HOURFORMAT_24;
 	hrtc.RTC_Config.RTC_AsynchPrediv = 128;
 	hrtc.RTC_Config.RTC_SynchPrediv = 256;
-	RTC_Init(&hrtc);
 
 	// set RTC time
 	hrtc.Time.hour = 11;
-	hrtc.Time.minute = 00;
-	hrtc.Time.second = 23;
-	RTC_SetTime(&hrtc);
+	hrtc.Time.minute = 22;
+	hrtc.Time.second = 33;
 
 	// set RTC date
-	hrtc.Date.weekDay = MONDAY;
-	hrtc.Date.month = APRIL;
-	hrtc.Date.date = 27;
-	hrtc.Date.year = 24;
-	RTC_SetDate(&hrtc);
+	hrtc.Date.weekDay = WEDNESDAY;
+	hrtc.Date.month = JANUARY;
+	hrtc.Date.date = 1;
+	hrtc.Date.year = 25;
+	RTC_Init(&hrtc);
 
 	// alarm A configuration
 	sAlarm.hour = 00;

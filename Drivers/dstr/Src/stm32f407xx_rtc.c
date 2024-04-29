@@ -178,6 +178,7 @@ void RTC_SetTime(RTC_Handle_t *pRTCHandle)
 /********************************************************************************************************/
 void RTC_SetDate(RTC_Handle_t * pRTCHandle)
 {
+
 	RTC_DR_Reg_t DR_Temp = {0};
 
 	//Disable RTC registers write protection

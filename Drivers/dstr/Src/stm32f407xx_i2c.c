@@ -24,8 +24,7 @@
 										@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@													*/
 
 #include <stm32f407xx_i2c.h>
-#include <core_cm4.h>
-#include <stm32f4xx_hal.h>
+
 
 
 static void I2C_GenerateStartCondition(I2C_RegDef_t *pI2Cx);
@@ -47,7 +46,7 @@ static void I2C_ExecuteAddressPhaseWrite(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr)
 	SlaveAddr = SlaveAddr << 1;
 	//clear 0th bit because 0th bit is 'read/write' bit and '0' stands for 'write'
 	SlaveAddr &= ~(1);
-	pI2Cx->DR.bit.dr = SlaveAddr;
+	pI2Cx->DR.reg = SlaveAddr;
 }
 
 
@@ -410,10 +409,10 @@ void I2C_MasterSendData(I2C_Handle_t *pI2CHandle,uint8_t *pTxbuffer, uint32_t Le
 	I2C_ExecuteAddressPhaseWrite(pI2CHandle->pI2Cx,SlaveAddr);
 
 	//4. Confirm that address phase is completed by checking the ADDR flag in the SR1
-	while(!I2C_GetFlagStatus(pI2CHandle->pI2Cx,I2C_SR1_ADDR))
-	{
-
-	}
+//	while(!I2C_GetFlagStatus(pI2CHandle->pI2Cx,I2C_SR1_ADDR))
+//	{
+//
+//	}
 
 	//5. clear the ADDR flag according to its software sequence
 	//   Note: Until ADDR is cleared SCL will be stretched (pulled to LOW)
@@ -422,10 +421,10 @@ void I2C_MasterSendData(I2C_Handle_t *pI2CHandle,uint8_t *pTxbuffer, uint32_t Le
 	//6. send the data until len becomes 0
 	while(Len > 0)
 	{
-		while(!I2C_GetFlagStatus(pI2CHandle->pI2Cx,I2C_SR1_TxE))
-		{
-			//Wait till TXE is set
-		}
+//		while(!I2C_GetFlagStatus(pI2CHandle->pI2Cx,I2C_SR1_TxE))
+//		{
+//			//Wait till TXE is set
+//		}
 		pI2CHandle->pI2Cx->DR.bit.dr = *pTxbuffer;
 		pTxbuffer++;
 		Len--;
@@ -580,82 +579,86 @@ void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle,uint8_t *pRxBuffer, uint8_t 
 /********************************************************************************************************/
 void I2C_Mem_Write(I2C_Handle_t *pI2CHandle, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size)
 {
-    // Generate the Start Condition
-    I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
 
-    // Wait until SB flag is set
-    while (!I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_SR1_SB));
+	if(SET != pI2CHandle->pI2Cx->CR1.bit.pe)
+	{
+		pI2CHandle->pI2Cx->CR1.bit.pe = SET;
+	}
 
-    // Send the device address with write option
-    I2C_ExecuteAddressPhaseWrite(pI2CHandle->pI2Cx, DevAddress);
+	pI2CHandle->pI2Cx->CR1.bit.pos = RESET;
 
-    // Wait until ADDR flag is set
-    while (!I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_SR1_ADDR))
-    {
+	pI2CHandle->pTxBuffer = pData;
+	pI2CHandle->TxLen = Size;
 
-    }
+	I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
 
-    // Clear the ADDR flag
-    I2C_ClearADDRFlag(pI2CHandle);
+	while(!I2C_GetFlagStatus(pI2CHandle->pI2Cx,I2C_SR1_SB))
+	{
 
-    // Wait until TXE flag is set
-    while (!I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_SR1_TxE))
-    {
+	}
 
-    }
+	pI2CHandle->pI2Cx->DR.reg = ((uint8_t)(DevAddress) & (uint8_t)(~(0x1UL << 0U)));
 
-    // If memory address size is 16 bits
-    if (MemAddSize == I2C_MEMADD_SIZE_16BIT)
-    {
-        // Send the high byte of the memory address
-        pI2CHandle->pI2Cx->DR.bit.dr = (uint8_t)((MemAddress & 0xFF00) >> 8);
+	while(!I2C_GetFlagStatus(pI2CHandle->pI2Cx,I2C_SR1_ADDR))
+	{
 
-        // Wait until TXE flag is set
-        while (!I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_SR1_TxE))
-        {
+	}
 
-        }
+	//clear the ADDR flag
+	I2C_ClearADDRFlag(pI2CHandle);
 
-        // Send the low byte of the memory address
-        pI2CHandle->pI2Cx->DR.bit.dr = (uint8_t)(MemAddress & 0x00FF);
-    }
-    else
-    {
-        // Memory address size is 8 bits, send the memory address
-        pI2CHandle->pI2Cx->DR.bit.dr = (uint8_t)MemAddress;
-    }
+	if (MemAddSize == I2C_MEMADD_SIZE_8BIT)
+	{
+		/* Send Memory Address */
+		pI2CHandle->pI2Cx->DR.reg = ((uint8_t)(uint16_t)((DevAddress) & (uint16_t)(0x00FF)));
+	}
+	else
+	{
+		pI2CHandle->pI2Cx->DR.reg = ((uint8_t)((uint16_t)(((uint16_t)((DevAddress) & (uint16_t)0x00FF)) >> 8)));
+	}
 
-    // Wait until TXE flag is set
-    while (!I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_SR1_TxE))
-    {
+	while(!I2C_GetFlagStatus(pI2CHandle->pI2Cx,I2C_SR1_TxE))
+	{
 
-    }
+	}
 
-    // Write the data to the memory
-    while (Size > 0)
-    {
-        pI2CHandle->pI2Cx->DR.bit.dr = *pData;
-        pData++;
-        Size--;
+	pI2CHandle->pI2Cx->DR.reg = ((uint8_t)(uint16_t)((DevAddress) & (uint16_t)(0x00FF)));
 
-        // Wait until TXE flag is set
-        while (!I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_SR1_TxE))
-        {
+	while(pI2CHandle->TxLen > 0)
+	{
+		while(!I2C_GetFlagStatus(pI2CHandle->pI2Cx,I2C_SR1_TxE))
+		{
 
-        }
-    }
+		}
 
-    // Wait until BTF flag is set
-    while (!I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_SR1_BTF))
-    {
+		pI2CHandle->pI2Cx->DR.reg = *pI2CHandle->pTxBuffer;
 
-    }
+		pI2CHandle->pTxBuffer++;
 
-    // Generate the Stop Condition
-    I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+		pI2CHandle->TxLen--;
+		Size--;
+
+		if((SET == I2C_GetFlagStatus(pI2CHandle->pI2Cx,I2C_SR1_BTF)) && (pI2CHandle->TxLen != 0))
+		{
+			pI2CHandle->pI2Cx->DR.reg = *pI2CHandle->pTxBuffer;
+
+			pI2CHandle->pTxBuffer++;
+
+			pI2CHandle->TxLen--;
+			Size--;
+		}
+	}
+
+	while(!I2C_GetFlagStatus(pI2CHandle->pI2Cx,I2C_SR1_BTF))
+	{
+		if(SET == pI2CHandle->pI2Cx->SR1.bit.af)
+		{
+			I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+		}
+	}
+
+	I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
 }
-
-
 
 
 /********************************************************************************************************/

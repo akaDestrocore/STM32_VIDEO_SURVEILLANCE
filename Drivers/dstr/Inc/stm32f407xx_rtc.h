@@ -61,7 +61,7 @@ typedef struct
 
 typedef struct
 {
-	uint16_t year;
+	uint8_t year;
 	uint8_t month;
 	uint8_t date;
 	uint8_t weekDay;
