@@ -289,7 +289,7 @@ void I2C_DeInit(I2C_RegDef_t *pI2Cx)
 /*																										*/
 /* @return				- flag state																	*/
 /*																										*/
-/* @Note				- none																			*/
+/* @Note					- none																			*/
 /********************************************************************************************************/
 uint8_t I2C_GetFlagStatus(I2C_RegDef_t *pI2Cx , uint32_t FlagName)
 {

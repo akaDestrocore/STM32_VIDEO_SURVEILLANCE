@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <stm32f407xx_gpio.h>
+#include <stm32f4xx_hal.h>
 #include <stdio.h>
 
 extern DMA_HandleTypeDef hdma_dcmi;

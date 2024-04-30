@@ -53,7 +53,7 @@ Current_Time_t video_times[10];
 int video_count = 0;
 
 
-#define MAX_VIDEOS 10
+#define MAX_VIDEOS 4
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -66,6 +66,27 @@ void MX_USB_HOST_Process(void);
 static void I2C_Config(void);
 static void RTC_Config(void);
 
+
+/********************************************************************************************************/
+/* @function name        - compare_timestamp                                                           	*/
+/*                                                                                                      */
+/* @brief               	 - Compares two timestamps and determines their chronological order             */
+/*                                                                                                      */
+/* @parameter[in]        - pointer to the date structure of the first timestamp                         */
+/*                                                                                                      */
+/* @parameter[in]        - pointer to the time structure of the first timestamp                         */
+/*                                                                                                      */
+/* @parameter[in]        - pointer to the date structure of the second timestamp                        */
+/*                                                                                                      */
+/* @parameter[in]        - pointer to the time structure of the second timestamp                        */
+/*                                                                                                      */
+/* @return               - An integer representing the chronological order of the timestamps:           */
+/*                         0 if equal, a positive number if the first is later, or a negative number    */
+/*                         if the second is later                                                       */
+/*                                                                                                      */
+/* @Note                 - The function sequentially compares year, month, date, hour, minute, and 		*/
+/*                         second of the two timestamps. It returns as soon as a difference is found    */
+/********************************************************************************************************/
 
 int compare_timestamp(const Current_Date_t* ts1_date, const Current_Time_t* ts1_time,
                       const Current_Date_t* ts2_date, const Current_Time_t* ts2_time)
@@ -93,6 +114,21 @@ int compare_timestamp(const Current_Date_t* ts1_date, const Current_Time_t* ts1_
     return ts1_time->second - ts2_time->second;
 }
 
+/********************************************************************************************************/
+/* @function name        - add_video_timestamp                                                         	*/
+/*                                                                                                      */
+/* @brief               	 - adds a timestamp to the video timestamp array                                */
+/*                                                                                                      */
+/* @parameter[in]        - pointer to the date structure containing the date of the video               */
+/*                                                                                                      */
+/* @parameter[in]        - pointer to the time structure containing the time of the video               */
+/*                                                                                                      */
+/* @return               - none                                                                         */
+/*                                                                                                      */
+/* @Note                 - The function stores the date and time of a video into separate arrays. It    */
+/*                         increments the video count as long as it does not exceed the maximum number  */
+/*                         of allowed videos.                                                           */
+/********************************************************************************************************/
 void add_video_timestamp(const Current_Date_t* date, const Current_Time_t* time)
 {
     if (video_count < MAX_VIDEOS)
@@ -103,6 +139,18 @@ void add_video_timestamp(const Current_Date_t* date, const Current_Time_t* time)
     }
 }
 
+/********************************************************************************************************/
+/* @function name        - delete_oldest_video                                                         	*/
+/*                                                                                                      */
+/* @brief                - deletes the oldest video file based on timestamp comparison                  */
+/*                                                                                                      */
+/* @return               - none                                                                         */
+/*                                                                                                      */
+/* @Note                 - This function identifies the oldest video by comparing timestamps, constructs*/
+/*                         the filename based on the date and time, deletes the file from the filesystem*/
+/*                         and then removes the timestamp from the tracking arrays. It decrements the   */
+/*                         video count to reflect the deletion.                                         */
+/********************************************************************************************************/
 void delete_oldest_video(void)
 {
     if (video_count > 0)
@@ -122,16 +170,12 @@ void delete_oldest_video(void)
         sprintf(filename, "%02dy%02dm%02dd_REC_%02d_%02d_%02d.avi",
         		video_dates[oldest_index].year, video_dates[oldest_index].month, video_dates[oldest_index].date,video_times[oldest_index].hour, video_times[oldest_index].minute, video_times[oldest_index].second);
         char filepath[128];
-        sprintf(filepath, "/Video/%s", filename);
-        FRESULT fr = f_unlink(filepath);
-        if (fr == FR_OK) {
-            printf("Deleted oldest video: %s\n", filename);
-        } else {
-            printf("Failed to delete oldest video: %s\n", filename);
-        }
+        sprintf(filepath, "/VIDEO/%s", filename);
+        f_unlink(filepath);
 
         // Remove the oldest timestamp from the list
-        for (int i = oldest_index; i < video_count - 1; ++i) {
+        for (int i = oldest_index; i < video_count - 1; ++i)
+        {
             memcpy(&video_dates[i], &video_dates[i + 1], sizeof(Current_Time_t));
             memcpy(&video_times[i], &video_times[i + 1], sizeof(Current_Time_t));
         }
@@ -139,14 +183,38 @@ void delete_oldest_video(void)
     }
 }
 
+/********************************************************************************************************/
+/* @function name        - check_delete_oldest_video                                                   	*/
+/*                                                                                                      */
+/* @brief                - checks if the video count exceeds the maximum limit and deletes the oldest   */
+/*                         video if necessary                                                           */
+/*                                                                                                      */
+/* @return               - none                                                                         */
+/*                                                                                                      */
+/* @Note                 - This function is a safeguard to prevent exceeding the maximum number of      */
+/*                         videos allowed. It calls the function to delete the oldest video when the    */
+/*                         video count surpasses the maximum threshold.                                 */
+/********************************************************************************************************/
 void check_delete_oldest_video(void)
 {
-    if (video_count >= (MAX_VIDEOS+1))
+    if (video_count >= MAX_VIDEOS)
     {
         delete_oldest_video();
     }
 }
 
+/********************************************************************************************************/
+/* @function name        - rec_begin                                                                   	*/
+/*                                                                                                      */
+/* @brief                - initiates the recording of a video by creating a new file with a timestamp   */
+/*                                                                                                      */
+/* @return               - none                                                                         */
+/*                                                                                                      */
+/* @Note                 - This function retrieves the current date and time, adds the timestamp to the */
+/*                         list of recorded videos, checks and deletes the oldest video if necessary,   */
+/*                         and then starts the recording process by creating a new AVI file named with  */
+/*                         the current timestamp and beginning the MJPEG AVI output.                    */
+/********************************************************************************************************/
 void rec_begin(void)
 {
 
@@ -172,7 +240,16 @@ void rec_begin(void)
 	}
 }
 
-
+/********************************************************************************************************/
+/* @function name        - main function body                                                           */
+/*                                                                                                      */
+/* @brief                - the main entry point of the program                                          */
+/*                                                                                                      */
+/* @Note                 - This function initializes the hardware abstraction layer, configures system  */
+/*                         clock, peripheral common clocks, and various peripherals. It then enters an  */
+/*                         infinite loop where it checks and handles the recording status, and processes*/
+/*                         USB host related tasks.                                                      */
+/********************************************************************************************************/
 int main(void)
 {
 
@@ -195,8 +272,6 @@ int main(void)
 	MX_LIBJPEG_Init();
 	RTC_Config();
 
-
-
 	// turn on USB powering
 	MX_DriverVbusFS(0);
 
@@ -212,12 +287,21 @@ int main(void)
 		  set_avi_output_status(AVI_READY);
 		}
 		MX_USB_HOST_Process();
-
 	}
-
 }
 
-
+/********************************************************************************************************/
+/* @function name        - SystemClock_Config                                                           */
+/*                                                                                                      */
+/* @brief                - configures the system clock and oscillator parameters                        */
+/*                                                                                                      */
+/* @return               - none                                                                         */
+/*                                                                                                      */
+/* @Note                 - This function sets up the main internal regulator output voltage, initializes*/
+/*                         the RCC oscillators with specified parameters, and configures the CPU, AHB,  */
+/*                         and APB buses clocks. It also handles potential errors during configuration  */
+/*                         and sets up the MCU output clock (MCO).                         				*/
+/********************************************************************************************************/
 void SystemClock_Config(void)
 {
 	RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -261,6 +345,19 @@ void SystemClock_Config(void)
 	HAL_RCC_MCOConfig(RCC_MCO2, RCC_MCO2SOURCE_PLLI2SCLK, RCC_MCODIV_4);
 }
 
+/********************************************************************************************************/
+/* @function name        - PeriphCommonClock_Config                                                    	*/
+/*                                                                                                      */
+/* @brief                - configures the peripheral common clock (PLL I2S)                             */
+/*                                                                                                      */
+/* @return               - none                                                                         */
+/*                                                                                                      */
+/* @Note                 - This function initializes the peripheral clock configuration structure and   */
+/*                         sets the PLL I2S clock parameters. It then applies these settings via the    */
+/*                         HAL_RCCEx_PeriphCLKConfig function. If the configuration is not successful,  */
+/*                         the Error_Handler function is called.                                        */
+/********************************************************************************************************/
+
 void PeriphCommonClock_Config(void)
 {
 	RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
@@ -274,6 +371,17 @@ void PeriphCommonClock_Config(void)
 	}
 }
 
+/********************************************************************************************************/
+/* @function name        - DCMI_Config                                                                  */
+/*                                                                                                      */
+/* @brief                - configures the Digital Camera Interface (DCMI) peripheral                    */
+/*                                                                                                      */
+/* @return               - none                                                                         */
+/*                                                                                                      */
+/* @Note                 - This function initializes the DCMI peripheral with specific synchronization, */
+/*                         polarity, capture rate, data mode, and JPEG mode settings. If the            */
+/*                         initialization fails, it calls the Error_Handler function.                   */
+/********************************************************************************************************/
 static void DCMI_Config(void)
 {
 	hdcmi.Instance = DCMI;
@@ -290,6 +398,17 @@ static void DCMI_Config(void)
 	}
 }
 
+/********************************************************************************************************/
+/* @function name        - DMA_Config                                                                   */
+/*                                                                                                      */
+/* @brief                - configures the Direct Memory Access (DMA) for use with the DCMI              */
+/*                                                                                                      */
+/* @return               - none                                                                         */
+/*                                                                                                      */
+/* @Note                 - This function enables the clock for DMA2 and initializes the DMA2_Stream1    */
+/*                         interrupt with priority settings. This stream is configured for use with the */
+/*                         Digital Camera Interface (DCMI) for image data transfer.                     */
+/********************************************************************************************************/
 static void DMA_Config(void)
 {
 	// enable DMA2 clock
@@ -300,7 +419,18 @@ static void DMA_Config(void)
 	HAL_NVIC_EnableIRQ(DMA2_Stream1_IRQn);
 }
 
-
+/********************************************************************************************************/
+/* @function name        - GPIO_Config                                                                  */
+/*                                                                                                      */
+/* @brief                - Configures the General-Purpose Input/Output (GPIO) pins                      */
+/*                                                                                                      */
+/* @return               - none                                                                         */
+/*                                                                                                      */
+/* @Note                 - This function enables the necessary GPIO clocks, ensures specific pins are   */
+/*                         set to desired states, and configures various pins for their intended        */
+/*                         functions such as output, input, alternate function, and external interrupts.*/
+/*                         It also sets the priority and enables interrupts for EXTI line 0.            */
+/********************************************************************************************************/
 static void GPIO_Config(void)
 {
 	GPIO_Handle_t GPIO_InitStruct = {0};
@@ -342,7 +472,6 @@ static void GPIO_Config(void)
 	GPIO_InitStruct.GPIO_Config.PinPuPdControl = GPIO_PIN_PULL_DOWN;
 	GPIO_Init(&GPIO_InitStruct);
 
-
 	// configure DCMI_XCLX_Pin
 	GPIO_InitStruct.pGPIOx = DCMI_XCLX_GPIO_Port;
 	GPIO_InitStruct.GPIO_Config.PinNumber = DCMI_XCLX_Pin;
@@ -357,6 +486,18 @@ static void GPIO_Config(void)
 	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 }
 
+/********************************************************************************************************/
+/* @function name        - I2C_Config                                                                  	*/
+/*                                                                                                      */
+/* @brief                - Configures the Inter-Integrated Circuit (I2C) interface                      */
+/*                                                                                                      */
+/* @return               - none                                                                         */
+/*                                                                                                      */
+/* @Note                 - This function initializes the I2C1 peripheral with standard speed, disables  */
+/*                         acknowledgments, and sets the duty cycle. It also configures the GPIO pins   */
+/*                         PB8 and PB9 for I2C SCL and SDA functions, respectively, and enables the I2C1*/
+/*                         clock in the RCC peripheral clock enable register.                           */
+/********************************************************************************************************/
 static void I2C_Config(void)
 {
 	GPIO_Handle_t sI2C_GPIO = {0};
@@ -368,9 +509,9 @@ static void I2C_Config(void)
 	hi2c1.I2C_Config.I2C_AckControl = I2C_ACK_DISABLE;
 	I2C_Init(&hi2c1);
 
-	/*I2C1 GPIO Configuration
-	PB8     ------> I2C1_SCL
-	PB9     ------> I2C1_SDA */
+	//I2C1 GPIO Configuration
+	// PB8 --> I2C1_SCL
+	// PB9 --> I2C1_SDA
 
 	sI2C_GPIO.pGPIOx = GPIOB;
 	sI2C_GPIO.GPIO_Config.PinNumber = GPIO_PIN_8;
@@ -385,9 +526,20 @@ static void I2C_Config(void)
 	GPIO_Init(&sI2C_GPIO);
 
 	RCC->APB1ENR.bit.i2c1en = SET;
-
 }
 
+/********************************************************************************************************/
+/* @function name        - RTC_Config                                                                   */
+/*                                                                                                      */
+/* @brief                - Configures the Real-Time Clock (RTC) and alarm settings                      */
+/*                                                                                                      */
+/* @return               - none                                                                         */
+/*                                                                                                      */
+/* @Note                 - This function sets up the RTC with a 24-hour format, initializes the RTC with*/
+/*                         predefined prescalers, sets the current time and date, configures an alarm   */
+/*                         with specific mask settings, and enables the RTC alarm interrupt with priority*/
+/*                         settings. It also unlocks the RTC write protection for further configurations*/
+/********************************************************************************************************/
 static void RTC_Config(void)
 {
 	RTC_Alarm_t sAlarm = {0};
@@ -405,8 +557,8 @@ static void RTC_Config(void)
 	// set RTC date
 	hrtc.Date.weekDay = WEDNESDAY;
 	hrtc.Date.month = JANUARY;
-	hrtc.Date.date = 1;
-	hrtc.Date.year = 25;
+	hrtc.Date.date = 0x1;
+	hrtc.Date.year = 0x25;
 	RTC_Init(&hrtc);
 
 	// alarm A configuration
@@ -422,7 +574,6 @@ static void RTC_Config(void)
 	EXTI->IMR.bit.mr17 = SET;
 	EXTI->RTSR.bit.tr17 = SET;
 
-	RTC->WPR.bit.key = 0xFFU;
 
 	HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);

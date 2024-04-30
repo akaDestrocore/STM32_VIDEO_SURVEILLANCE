@@ -19,9 +19,9 @@ void EXTI0_IRQHandler(void)
 	 if((current_time - last_time) > 300)	//debouncing
 	 {
 		 begin_rec = 1;
-		 if (read_avi_output_status() == AVI_START)
+		 if(read_avi_output_status() == AVI_FINISH)
 		 {
-			 set_avi_output_status(AVI_PENDING); // stop recording
+			 set_avi_output_status(AVI_READY);
 		 }
 		 last_time = current_time; // Update the last_time
 	 }

@@ -1,6 +1,6 @@
 #ifndef INC_AVI_H_
 #define INC_AVI_H_
-#include <main.h>
+#include <stm32f4xx_hal.h>
 #include <fatfs.h>
 
 enum avi_resolution
@@ -15,6 +15,7 @@ typedef enum
 	AVI_START 		= 1,
 	AVI_PENDING 	= 2,
 	AVI_CLOSED_OUT	= 3,
+	AVI_FINISH		= 4,
 	AVI_READY		= 0
 }AVI_state_t;
 
@@ -163,10 +164,12 @@ typedef struct {
 	CHUNK movi_data;
 } avi_file;
 
+//function prototypes
 FRESULT output_avi_header(FIL *file, uint8_t fps, uint16_t width, uint16_t height);
 FRESULT start_output_mjpeg_avi(FIL *file, DCMI_HandleTypeDef *hdcmi, uint8_t fps, uint8_t resolution);
 void stop_output_mjpeg_avi(FIL *file, FIL* temp_idx1);
 void set_avi_output_status(uint8_t stat);
 void decode_jpeg_to_tft(uint8_t *buff, uint32_t len);
 uint8_t read_avi_output_status();
+
 #endif /* INC_AVI_H_ */

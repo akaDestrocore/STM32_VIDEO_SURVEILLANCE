@@ -7,6 +7,8 @@
 #include <ov2640.h>
 #include <string.h>
 #include <unistd.h>
+#include <simple_delay.h>
+#include <stm32f4xx_hal_dcmi.h>
 
 #define MAX_AVI_BUFF		20480 //20k for motion jpeg
 #define MAX_PICTURE_BUFF	92160 //90k for stikk jepg
@@ -23,6 +25,7 @@ typedef struct RGB
   uint8_t G;
   uint8_t R;
 }RGB_typedef;
+
 struct jpeg_error_mgr jerr;
 
 RGB_typedef *RGB_matrix;
@@ -34,10 +37,37 @@ uint8_t bAviStartRecording = AVI_READY; // 1: start, 2: pending, 3: closed outpu
 DWORD totalLen=0;
 DWORD frames=0;
 
+
+
+
+/********************************************************************************************************/
+/* @function name 		- LSBtoDWORD																	*/
+/*																										*/
+/* @brief				- converts a 4-byte array to a DWORD (32-bit unsigned integer) assuming 		*/
+/* 						  little-endian byte order														*/
+/*																										*/
+/* @parameter[in]		- pointer to the 4-byte array													*/
+/*																										*/
+/* @return				- the resulting DWORD value														*/
+/*																										*/
+/* @Note					- This function utilizes the I2C_Mem_Write function for communication			*/
+/********************************************************************************************************/
 DWORD LSBtoDWORD(char* lsb)
 {
 	return lsb[0] | lsb[1]<<8 | lsb[2]<<16 | lsb[3] << 24;
 }
+
+/********************************************************************************************************/
+/* @function name 		- fwrite_DWORD																	*/
+/*																										*/
+/* @brief				- writes a DWORD (32-bit unsigned integer) to a file							*/
+/*																										*/
+/* @parameter[in]		- the DWORD value to write														*/
+/*																										*/
+/* @return				- the status code of the operation												*/
+/*																										*/
+/* @Note					- This function writes exactly 4 bytes to the file								*/
+/********************************************************************************************************/
 FRESULT fwrite_DWORD(FIL * file, DWORD word)
 {
 	unsigned char * p;
@@ -46,9 +76,21 @@ FRESULT fwrite_DWORD(FIL * file, DWORD word)
 	p = (unsigned char *)&word;
 
 	return (f_write(file, p, 4, &bw));
-
 }
 
+/********************************************************************************************************/
+/* @function name 		- fwrite_WORD																	*/
+/*																										*/
+/* @brief				- writes a WORD (16-bit unsigned integer) to a file								*/
+/*																										*/
+/* @parameter[in]		- pointer to the FIL object that specifies the file								*/
+/*																										*/
+/* @parameter[in]		- the WORD value to write														*/
+/*																										*/
+/* @return				- the status code of the operation												*/
+/*																										*/
+/* @Note					- This function writes exactly 2 bytes to the file								*/
+/********************************************************************************************************/
 FRESULT fwrite_WORD(FIL * file, WORD word)
 {
 	unsigned char * p;
@@ -58,15 +100,50 @@ FRESULT fwrite_WORD(FIL * file, WORD word)
 	return (f_write(file, p, 2, &bw));
 
 }
+
+/********************************************************************************************************/
+/* @function name 		- set_avi_output_status															*/
+/*																										*/
+/* @brief				- sets the value of status variable for AVI output								*/
+/*																										*/
+/* @parameter[in]		- the status value to set														*/
+/*																										*/
+/* @return				- none																			*/
+/*																										*/
+/* @Note					- This function updates a global variable that controls AVI recording			*/
+/********************************************************************************************************/
 void set_avi_output_status(uint8_t stat)
 {
 	bAviStartRecording = stat;
 }
+
+/********************************************************************************************************/
+/* @function name 		- read_avi_output_status														*/
+/*																										*/
+/* @brief				- reads the current status of AVI output										*/
+/*																										*/
+/* @return				- current status of AVI output													*/
+/*																										*/
+/* @Note					- This function returns the value of a global variable that controls recording	*/
+/********************************************************************************************************/
 uint8_t read_avi_output_status()
 {
 	return bAviStartRecording;
 }
 
+/********************************************************************************************************/
+/* @function name 		- decode_jpeg_to_tft															*/
+/*																										*/
+/* @brief				- decodes a JPEG image and converts to raw TFT display data						*/
+/*																										*/
+/* @parameter[in]		- pointer to the buffer containing the JPEG image								*/
+/*																										*/
+/* @parameter[in]		- size of the buffer															*/
+/*																										*/
+/* @return				- none																			*/
+/*																										*/
+/* @Note					- This function decodes the JPEG image and handles the display process			*/
+/********************************************************************************************************/
 void decode_jpeg_to_tft(uint8_t *buff, uint32_t len)
 {
 	uint32_t line_counter = 0;
@@ -74,7 +151,7 @@ void decode_jpeg_to_tft(uint8_t *buff, uint32_t len)
 
 	buffer[0] = rowBuff;
 
-	//jpeg must begin 0xFFD8 end 0xFFD9
+	// JPEG must begin with 0xFFD8 and end with 0xFFD9
 	if (!(buff[0] == 0xFF && buff[1] == 0xD8 && buff[len-2]==0xFF && buff[len-1] == 0xD9))
 		return;
 	cinfo.err = jpeg_std_error(&jerr);
@@ -115,6 +192,26 @@ void decode_jpeg_to_tft(uint8_t *buff, uint32_t len)
 	jpeg_destroy_decompress(&cinfo);
 }
 
+/********************************************************************************************************/
+/* @function name 		- output_avi_header																*/
+/*																										*/
+/* @brief				- writes the header for an AVI file to the specified file						*/
+/*																										*/
+/* @parameter[in]		- pointer to the file object representing the AVI file							*/
+/*																										*/
+/* @parameter[in]		- frames per second for the AVI video											*/
+/*																										*/
+/* @parameter[in]		- width of the video frames in pixels											*/
+/*																										*/
+/* @parameter[in]		- height of the video frames in pixels 											*/
+/*																										*/
+/* @return				- status code indicating the result of the operation							*/
+/*																										*/
+/* @Note					- This function initializes the AVI file with the necessary headers and prepares*/
+/*						  it for video data to be written. The header includes the RIFF chunk, AVI main */
+/*						  header (avih), and stream header (strh) among others. The dwSize fields are   */
+/*						placeholders and should be updated with actual values during the writing process*/
+/********************************************************************************************************/
 FRESULT output_avi_header(FIL *file, uint8_t fps, uint16_t width, uint16_t height)
 {
 	FRESULT res=FR_OK;
@@ -318,6 +415,27 @@ FRESULT output_avi_header(FIL *file, uint8_t fps, uint16_t width, uint16_t heigh
 	return res;
 }
 
+
+/********************************************************************************************************/
+/* @function name 		- start_output_mjpeg_avi														*/
+/*																										*/
+/* @brief				- initiates the output of an MJPEG AVI file using data from DCMI interface		*/
+/*																										*/
+/* @parameter[in]		- pointer to the file object where the AVI file will be written					*/
+/*																										*/
+/* @parameter[in]		- pointer to the DCMI_HandleTypeDef structure for camera interface configuration*/
+/*																										*/
+/* @parameter[in]		- frames per second for the AVI video											*/
+/*																										*/
+/* @parameter[in]		- resolution setting for the camera 											*/
+/*																										*/
+/* @return				- status code indicating the result of the operation							*/
+/*																										*/
+/* @Note				   - This function configures the camera, initializes the AVI file header,and starts*/
+/*						 the recording process. It captures frames from the camera, checks for valid JPEG*/
+/*						 headers, writes the data to the file, and updates the index. 					*/
+/*						 The recording continues until the stop condition is met						*/
+/********************************************************************************************************/
 FRESULT start_output_mjpeg_avi(FIL *file, DCMI_HandleTypeDef *hdcmi, uint8_t fps, uint8_t resolution)
 {
 	FRESULT res = FR_OK;
@@ -374,7 +492,7 @@ FRESULT start_output_mjpeg_avi(FIL *file, DCMI_HandleTypeDef *hdcmi, uint8_t fps
 
 			//if (1000/fps > time_diff && time_diff > 0)
 			if (1000 > time_diff)
-				HAL_Delay(1000 - time_diff);
+				delay_ms(1000 - time_diff);
 		}
 
 		beginTick = HAL_GetTick();
@@ -388,7 +506,7 @@ FRESULT start_output_mjpeg_avi(FIL *file, DCMI_HandleTypeDef *hdcmi, uint8_t fps
 			{
 				break; //max timeout: 1 seconds
 			}
-			HAL_Delay(1);
+			delay_ms(1);
 			timeout++;
 		}
 		if(timeout <= 1000)
@@ -467,6 +585,22 @@ FRESULT start_output_mjpeg_avi(FIL *file, DCMI_HandleTypeDef *hdcmi, uint8_t fps
 	return res;
 }
 
+/********************************************************************************************************/
+/* @function name 		- stop_output_mjpeg_avi															*/
+/*																										*/
+/* @brief				- finalizes the output of an MJPEG AVI file and updates the file's headers      */
+/*																										*/
+/* @parameter[in]		- pointer to the file object where the AVI file has been written                */
+/*																										*/
+/* @parameter[in]		- pointer to the temporary index file used during AVI file creation             */
+/*																										*/
+/* @return				- none																			*/
+/*																										*/
+/* @Note					- This function is called to finalize the AVI file after recording is complete. */
+/*						  It writes the 'idx1' chunk, updates the file size, frame count, and other     */
+/*						 header information. It also closes the temporary index file and the main AVI   */
+/*						 file, and sets the recording status to closed.                                 */
+/********************************************************************************************************/
 void stop_output_mjpeg_avi(FIL *file, FIL* temp_idx1)
 {
 	UINT br;

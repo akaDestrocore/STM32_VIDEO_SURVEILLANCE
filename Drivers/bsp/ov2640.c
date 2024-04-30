@@ -1,8 +1,32 @@
+/*										@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+										@@@@@@@@@@@@@@@@##@@@@@@@@`%@@@@@@@@@@@@@@@@@@@@
+										@@@@@@@@@@@@@@@@‾‾* `        ` *@@@@@@@@@@@@@@@@@
+										@@@@@@@@@@@@@@#                   #@@@@@@@@@@@@@
+										@@@@@@@@@@@@                        @@@@@@@@@@@@
+										@@@@@@@@@@@          _ @@@@@@@\     ``\@@@@@@@@@
+										@@@@@@@@%       %@@@@ ``*@@@@@@\_      \@@@@@@@@
+										@@@@@@@*      +@@@@@  /@@#  `*@@@@\_    \@@@@@@@
+										@@@@@@/      /@@@@@   /@@  @@@@@@@@@|    !@@@@@@
+										@@@@/       /@@@@@@@%  *  /` ___*@@@|    |@@@@@@
+										@@@#       /@@@@@@@@@       ###}@@@@|    |@@@@@@
+										@@@@@|     |@@@@@@@@@      	  __*@@@      @@@@@@
+										@@@@@*     |@@@@@@@@@        /@@@@@@@/     '@@@@
+										@@@@@@|    |@@ \@@          @@@@@@@@@      /@@@@
+										@@@@@@|     |@@ _____     @@@@@@@@*       @@@@@@
+										@@@@@@*     \@@@@@@@@@    @@@@@@@/         @@@@@
+										@@@@@@@\     \@@@@@@@@@  @@@@@@@%        @@@@@@@
+										@@@@@@@@\     \@@@@@@@@  @\  ‾‾‾           @@@@@@
+										@@@@@@@@@@\    \@@@@@@@  @@/ _==> $     @@@@@@@@
+										@@@@@@@@@@@@*    \@@@@@@@@@@@##‾‾   ``  @@@@@@@@@
+										@@@@@@@@@@@@@@@@\     ___*@@`*    /@@@@@@@@@@@@@
+										@@@@@@@@@@@@@@@@@@@@@--`@@@@__@@@@@@@@@@@@@@@@@@
+										@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+										@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@													*/
 
 #include <ov2640.h>
 
 
-extern I2C_Handle_t hi2c1;
+extern I2C_Handle_t hi2c1;	//exported I2C handle
 
 /* Initialization sequence for QVGA resolution (320x240, RGB565) */
 const unsigned char OV2640_QVGA[][2]=
@@ -184,98 +208,153 @@ const unsigned char OV2640_1280x960_JPEG[][2] = { { 0xFF, 0x01 },
 				0x88 }, { 0x57, 0x00 }, { 0x5a, 0x40 }, { 0x5b, 0xf0 }, { 0x5c,
 				0x01 }, { 0xd3, 0x02 }, { 0xe0, 0x00 }, { 0xff, 0xff } };
 
+
+
+/********************************************************************************************************/
+/* @function name 		- CAMERA_IO_Write																*/
+/*																										*/
+/* @brief				- writes a value to a camera register via I2C									*/
+/*																										*/
+/* @parameter[in]		- pointer to the address of the device on the I2C bus							*/
+/*																										*/
+/* @parameter[in]		- register address to write to													*/
+/*																										*/
+/* @parameter[in]		- memory address																*/
+/*																										*/
+/* @parameter[in]		- value to write to the register												*/
+/*																										*/
+/* @return				- none																			*/
+/*																										*/
+/* @Note					- This function utilizes the I2C_Mem_Write function for communication			*/
+/********************************************************************************************************/
 void CAMERA_IO_Write(uint8_t deviceAddr, uint8_t reg, uint8_t value)
 {
 	I2C_Mem_Write(&hi2c1, deviceAddr, reg, I2C_MEMADD_SIZE_8BIT, &value, 1);
 }
 
+
+/********************************************************************************************************/
+/* @function name 		- CAMERA_Delay																	*/
+/*																										*/
+/* @brief				- delays execution for a specified period										*/
+/*																										*/
+/* @parameter[in]		- the duration of the delay in milliseconds										*/
+/*																										*/
+/* @return				- none																			*/
+/*																										*/
+/* @Note					- This function is a wrapper for delay_ms										*/
+/********************************************************************************************************/
 void CAMERA_Delay(uint32_t Delay)
 {
-	HAL_Delay(Delay);
+	delay_ms(Delay);
 }
 
+
+/********************************************************************************************************/
+/* @function name 		- ov2640_Init																	*/
+/*																										*/
+/* @brief				- initializes the OV2640 camera module											*/
+/*																										*/
+/* @parameter[in]		- the device address of the camera												*/
+/*																										*/
+/* @parameter[in]		- the initialization action or configuration to be set							*/
+/*																										*/
+/* @return				- none																			*/
+/*																										*/
+/* @Note					- This function performs hardware and software initialization steps and 		*/
+/* 						  configures the camera based on the specified action.							*/
+/********************************************************************************************************/
 void ov2640_Init(uint16_t DeviceAddr, uint8_t action)
 {
   uint32_t index;
 
-//hardware and software init
-  GPIO_WritePin(CAMERA_PWDN_GPIO_Port, CAMERA_PWDN_Pin, RESET); //power on
+  //hardware and software initialization
+
+  //power on
+  GPIO_WritePin(CAMERA_PWDN_GPIO_Port, CAMERA_PWDN_Pin, RESET);
   delay_ms(1);
-  GPIO_WritePin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_Pin, RESET);  //hardware reset
+  //hardware reset
+  GPIO_WritePin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_Pin, RESET);
   delay_ms(1);
   GPIO_WritePin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_Pin, SET);
   delay_ms(1);
 
-  /* Prepare the camera to be configured */
+  // prepare the camera to be configured
   CAMERA_IO_Write(DeviceAddr, 0xff, 0x01);
   CAMERA_IO_Write(DeviceAddr, 0x12, 0x80);
   CAMERA_Delay(20);
 
-  /* Initialize OV2640 */
+  // initialize OV2640
   switch (action)
   {
-  case CAMERA_Movie:
-	  for(index=0; index<(sizeof(OV2640_JPEG_INIT)/2); index++)
-	  {
-		  CAMERA_IO_Write(DeviceAddr, OV2640_JPEG_INIT[index][0], OV2640_JPEG_INIT[index][1]);
-		  CAMERA_Delay(1);
-	  }
-
-	for(index=0; index<(sizeof(OV2640_YUV422)/2); index++)
+	case CAMERA_Movie:
 	{
-		CAMERA_IO_Write(DeviceAddr, OV2640_YUV422[index][0], OV2640_YUV422[index][1]);
-	  	CAMERA_Delay(1);
+		for(index = 0; index < (sizeof(OV2640_JPEG_INIT) / 2); index++)
+		{
+			CAMERA_IO_Write(DeviceAddr, OV2640_JPEG_INIT[index][0], OV2640_JPEG_INIT[index][1]);
+			CAMERA_Delay(1);
+		}
+
+		for(index = 0; index < (sizeof(OV2640_YUV422) / 2); index++)
+		{
+			CAMERA_IO_Write(DeviceAddr, OV2640_YUV422[index][0], OV2640_YUV422[index][1]);
+			CAMERA_Delay(1);
+		}
+
+		for(index = 0; index < (sizeof(OV2640_JPEG) / 2); index++)
+		{
+			CAMERA_IO_Write(DeviceAddr, OV2640_JPEG[index][0], OV2640_JPEG[index][1]);
+			CAMERA_Delay(1);
+		}
+
+		for(index = 0; index < (sizeof(OV2640_320x240_JPEG) / 2); index++)
+		{
+			CAMERA_IO_Write(DeviceAddr, OV2640_320x240_JPEG[index][0], OV2640_320x240_JPEG[index][1]);
+			CAMERA_Delay(1);
+		}
+		break;
 	}
 
-	for(index=0; index<(sizeof(OV2640_JPEG)/2); index++)
+	case CAMERA_Monitor:
 	{
-		CAMERA_IO_Write(DeviceAddr, OV2640_JPEG[index][0], OV2640_JPEG[index][1]);
-		CAMERA_Delay(1);
+		for(index = 0; index < (sizeof(OV2640_QVGA) / 2); index++)
+		{
+			CAMERA_IO_Write(DeviceAddr, OV2640_QVGA[index][0], OV2640_QVGA[index][1]);
+			CAMERA_Delay(1);
+		}
+		break;
+	}
+	case CAMERA_Picture:
+	{
+		for(index = 0; index < (sizeof(OV2640_JPEG_INIT) / 2); index++)
+		{
+			CAMERA_IO_Write(DeviceAddr, OV2640_JPEG_INIT[index][0], OV2640_JPEG_INIT[index][1]);
+			CAMERA_Delay(1);
+		}
+
+		for(index = 0; index < (sizeof(OV2640_YUV422) / 2); index++)
+		{
+			CAMERA_IO_Write(DeviceAddr, OV2640_YUV422[index][0], OV2640_YUV422[index][1]);
+			CAMERA_Delay(1);
+		}
+
+		for(index = 0; index < (sizeof(OV2640_JPEG) / 2); index++)
+		{
+			CAMERA_IO_Write(DeviceAddr, OV2640_JPEG[index][0], OV2640_JPEG[index][1]);
+			CAMERA_Delay(1);
+		}
+
+		for(index = 0; index < (sizeof(OV2640_1280x960_JPEG) / 2); index++)
+		{
+			CAMERA_IO_Write(DeviceAddr, OV2640_1280x960_JPEG[index][0], OV2640_1280x960_JPEG[index][1]);
+			CAMERA_Delay(1);
+		}
+		break;
 	}
 
-	for(index=0; index<(sizeof(OV2640_320x240_JPEG)/2); index++)
+	default:
 	{
-		CAMERA_IO_Write(DeviceAddr, OV2640_320x240_JPEG[index][0], OV2640_320x240_JPEG[index][1]);
-		CAMERA_Delay(1);
+		break;
 	}
-	break;
-  case CAMERA_Monitor:
-    {
-      for(index=0; index<(sizeof(OV2640_QVGA)/2); index++)
-      {
-        CAMERA_IO_Write(DeviceAddr, OV2640_QVGA[index][0], OV2640_QVGA[index][1]);
-        CAMERA_Delay(1);
-      }
-      break;
-    }
-  case CAMERA_Picture:
-  	  for(index=0; index<(sizeof(OV2640_JPEG_INIT)/2); index++)
-  	  {
-  		  CAMERA_IO_Write(DeviceAddr, OV2640_JPEG_INIT[index][0], OV2640_JPEG_INIT[index][1]);
-  		  CAMERA_Delay(1);
-  	  }
-
-  	for(index=0; index<(sizeof(OV2640_YUV422)/2); index++)
-  	{
-  		CAMERA_IO_Write(DeviceAddr, OV2640_YUV422[index][0], OV2640_YUV422[index][1]);
-  	  	CAMERA_Delay(1);
-  	}
-
-  	for(index=0; index<(sizeof(OV2640_JPEG)/2); index++)
-  	{
-  		CAMERA_IO_Write(DeviceAddr, OV2640_JPEG[index][0], OV2640_JPEG[index][1]);
-  		CAMERA_Delay(1);
-  	}
-
-  	for(index=0; index<(sizeof(OV2640_1280x960_JPEG)/2); index++)
-  	{
-  		CAMERA_IO_Write(DeviceAddr, OV2640_1280x960_JPEG[index][0], OV2640_1280x960_JPEG[index][1]);
-  		CAMERA_Delay(1);
-  	}
-	  break;
-  default:
-    {
-      break;
-    }
   }
 }

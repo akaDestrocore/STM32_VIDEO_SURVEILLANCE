@@ -28,10 +28,8 @@
 //#define HSE_VALUE  8000000U
 
 
-static uint8_t RTC_ConvertYear(uint16_t year);
-static uint8_t RTC_ConvertMonth(uint8_t month);
-static uint8_t RTC_ConvertDate(uint8_t date);
-
+uint8_t RTC_ByteToBcd2(uint8_t number);
+uint8_t RTC_Bcd2ToByte(uint8_t number);
 
 
 /*
@@ -101,17 +99,17 @@ void RTC_Init(RTC_Handle_t *pRTCHandle)
 		//Wait till initialization mode is set
 	}
 
-	//Set RTC configuration
-	RTC->CR.bit.fmt = pRTCHandle->RTC_Config.RTC_HourFormat;
-
-	RTC->PRER.bit.prediv_a = pRTCHandle->RTC_Config.RTC_AsynchPrediv - 1;
 	RTC->PRER.bit.prediv_s = pRTCHandle->RTC_Config.RTC_SynchPrediv - 1;
+	RTC->PRER.bit.prediv_a = pRTCHandle->RTC_Config.RTC_AsynchPrediv - 1;
 
 	//Set time
 	RTC_SetTime(pRTCHandle);
 
 	//Set date
 	RTC_SetDate(pRTCHandle);
+
+	//Set RTC configuration
+	RTC->CR.bit.fmt = pRTCHandle->RTC_Config.RTC_HourFormat;
 
 	//Disable initialization mode
 	RTC->ISR.bit.init = RESET;
@@ -134,17 +132,6 @@ void RTC_Init(RTC_Handle_t *pRTCHandle)
 /********************************************************************************************************/
 void RTC_SetTime(RTC_Handle_t *pRTCHandle)
 {
-	//Disable RTC registers write protection
-	RTC->WPR.bit.key = 0xCA;
-	RTC->WPR.bit.key = 0x53;
-
-	//Enable initialization mode
-	RTC->ISR.bit.init = SET;
-
-	while (!(SET == RTC->ISR.bit.initf))
-	{
-		//Wait till initialization mode is set
-	}
 
 	RTC_TR_Reg_t TR_temp = {0};
 
@@ -157,12 +144,6 @@ void RTC_SetTime(RTC_Handle_t *pRTCHandle)
 	TR_temp.bit.st  = pRTCHandle->Time.second / 10;
 	TR_temp.bit.su  = pRTCHandle->Time.second % 10;
 	RTC->TR.reg = TR_temp.reg;
-
-	//Disable initialization mode
-	RTC->ISR.bit.init = RESET;
-
-	//Enable RTC registers write protection
-	RTC->WPR.reg = 0xFF;
 }
 
 /********************************************************************************************************/
@@ -178,36 +159,18 @@ void RTC_SetTime(RTC_Handle_t *pRTCHandle)
 /********************************************************************************************************/
 void RTC_SetDate(RTC_Handle_t * pRTCHandle)
 {
-
 	RTC_DR_Reg_t DR_Temp = {0};
 
-	//Disable RTC registers write protection
-	RTC->WPR.bit.key = 0xCA;
-	RTC->WPR.bit.key = 0x53;
+	pRTCHandle->Date.month = (uint8_t)((pRTCHandle->Date.month & (uint8_t)~(0x10U)) + (uint8_t)0x0AU);
 
 	//Set RTC date
-	DR_Temp.bit.yu  = RTC_ConvertYear(pRTCHandle->Date.year);
-	DR_Temp.bit.mu  = RTC_ConvertMonth(pRTCHandle->Date.month);
-	DR_Temp.bit.du  = RTC_ConvertDate(pRTCHandle->Date.date);
-	DR_Temp.bit.wdu = pRTCHandle->Date.weekDay;
-
-	RTC->ISR.bit.rsf = RESET;
+	DR_Temp.bit.yt  = (uint32_t)RTC_ByteToBcd2(pRTCHandle->Date.year / 10);
+	DR_Temp.bit.yu  = (uint32_t)RTC_ByteToBcd2(pRTCHandle->Date.year % 10);
+	DR_Temp.bit.mu  = (uint32_t)RTC_ByteToBcd2(pRTCHandle->Date.month);
+	DR_Temp.bit.du  = (uint32_t)RTC_ByteToBcd2(pRTCHandle->Date.date);
+	DR_Temp.bit.wdu = (uint32_t)pRTCHandle->Date.weekDay;
 
 	RTC->DR.reg = DR_Temp.reg;
-
-	//Enable initialization mode
-	RTC->ISR.bit.init = SET;
-
-	while (!(SET == RTC->ISR.bit.initf))
-	{
-		//Wait till initialization mode is set
-	}
-
-	//Disable initialization mode
-	RTC->ISR.bit.init = RESET;
-
-	//Enable RTC registers write protection
-	RTC->WPR.reg = 0xFF;
 }
 
 /********************************************************************************************************/
@@ -272,6 +235,10 @@ void RTC_GetDate(RTC_Handle_t* pRTCHandle, Current_Date_Handle_t* pCurrentDateHa
 	pCurrentDateHandle->Date.date += DR_temp.bit.du;
 
 	pCurrentDateHandle->Date.weekDay = DR_temp.bit.wdu;
+
+	pCurrentDateHandle->Date.year  = (uint8_t)RTC_Bcd2ToByte(pCurrentDateHandle->Date.year);
+	pCurrentDateHandle->Date.month = (uint8_t)RTC_Bcd2ToByte(pCurrentDateHandle->Date.month);
+	pCurrentDateHandle->Date.date  = (uint8_t)RTC_Bcd2ToByte(pCurrentDateHandle->Date.date);
 }
 
 /********************************************************************************************************/
@@ -395,10 +362,12 @@ void RTC_SetAlarm_IT(RTC_Handle_t *pRTCHandle, RTC_AlarmType_t alarmType, RTC_Al
     // Enable the Alarm interrupt
     if(alarmType == RTC_ALARM_A)
     {
+    	RTC->CR.bit.alrae = SET;
         RTC->CR.bit.alraie = SET;
     }
     else
     {
+    	RTC->CR.bit.alrbe = SET;
         RTC->CR.bit.alrbie = SET;
     }
 
@@ -414,38 +383,26 @@ void RTC_SetAlarm_IT(RTC_Handle_t *pRTCHandle, RTC_AlarmType_t alarmType, RTC_Al
 /*
  * Helper functions
  */
-// Convert a 4-digit year value to BCD format
-static uint8_t RTC_ConvertYear(uint16_t year)
+// Convert a 2-digit value to BCD format
+uint8_t RTC_ByteToBcd2(uint8_t number)
 {
-    uint8_t bcd_year = 0;
-    bcd_year |= ((year % 100 /10) <<4);
-    bcd_year |= (year % 10 <<0);
-    return bcd_year;
-}
+	uint32_t bcdhigh = 0U;
 
-// Function to convert a decimal month to BCD format
-static uint8_t RTC_ConvertMonth(uint8_t month)
-{
-	uint8_t bcd_month = 0;
-    if(month > 9)
-    {
-    	bcd_month |= month/10 << 4;
-    }
-    bcd_month |= month%10 << 0;
-    return bcd_month;
-}
-
-// Function to convert a decimal date to BCD format
-static uint8_t RTC_ConvertDate(uint8_t date)
-{
-    uint8_t bcd_date = 0;
-    if(date > 9)
+	while (number >= 10U)
 	{
-    	bcd_date |= date/10 << 4;
+		bcdhigh++;
+		number -= 10U;
 	}
-	bcd_date |= date%10 << 0;
-	return bcd_date;
+
+	return ((uint8_t)(bcdhigh << 4U) | number);
 }
 
+// Convert a 2-digit value from BCD to decimal
+uint8_t RTC_Bcd2ToByte(uint8_t number)
+{
+	uint32_t tens = 0U;
+	tens = (((uint32_t)number & 0xF0U) >> 4U) * 10U;
+	return (uint8_t)(tens + ((uint32_t)number & 0x0FU));
+}
 
 /****************************************************** End of file ******************************************************/
