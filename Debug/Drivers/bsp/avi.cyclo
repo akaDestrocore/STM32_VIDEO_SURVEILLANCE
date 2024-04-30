@@ -6,4 +6,4 @@
 ../Drivers/bsp/avi.c:147:6:decode_jpeg_to_tft	8
 ../Drivers/bsp/avi.c:215:9:output_avi_header	2
 ../Drivers/bsp/avi.c:439:9:start_output_mjpeg_avi	22
-../Drivers/bsp/avi.c:609:6:stop_output_mjpeg_avi	3
+../Drivers/bsp/avi.c:604:6:stop_output_mjpeg_avi	3
