@@ -53,7 +53,7 @@ Current_Time_t video_times[10];
 int video_count = 0;
 
 
-#define MAX_VIDEOS 4
+#define MAX_VIDEOS 11
 
 
 /* Private function prototypes -----------------------------------------------*/

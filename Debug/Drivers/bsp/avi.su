@@ -1,9 +1,0 @@
-../Drivers/bsp/avi.c:55:7:LSBtoDWORD	16	static
-../Drivers/bsp/avi.c:71:9:fwrite_DWORD	24	static
-../Drivers/bsp/avi.c:94:9:fwrite_WORD	24	static
-../Drivers/bsp/avi.c:115:6:set_avi_output_status	16	static
-../Drivers/bsp/avi.c:129:9:read_avi_output_status	4	static
-../Drivers/bsp/avi.c:147:6:decode_jpeg_to_tft	24	static
-../Drivers/bsp/avi.c:215:9:output_avi_header	264	static
-../Drivers/bsp/avi.c:439:9:start_output_mjpeg_avi	24776	static
-../Drivers/bsp/avi.c:604:6:stop_output_mjpeg_avi	544	static

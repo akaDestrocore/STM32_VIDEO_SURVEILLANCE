@@ -1,9 +1,0 @@
-../Drivers/dstr/Src/stm32f407xx_rtc.c:49:6:RTC_ClockControl	4
-../Drivers/dstr/Src/stm32f407xx_rtc.c:81:6:RTC_Init	2
-../Drivers/dstr/Src/stm32f407xx_rtc.c:133:6:RTC_SetTime	1
-../Drivers/dstr/Src/stm32f407xx_rtc.c:160:6:RTC_SetDate	1
-../Drivers/dstr/Src/stm32f407xx_rtc.c:189:6:RTC_GetTime	2
-../Drivers/dstr/Src/stm32f407xx_rtc.c:221:6:RTC_GetDate	1
-../Drivers/dstr/Src/stm32f407xx_rtc.c:323:6:RTC_SetAlarm_IT	5
-../Drivers/dstr/Src/stm32f407xx_rtc.c:387:9:RTC_ByteToBcd2	2
-../Drivers/dstr/Src/stm32f407xx_rtc.c:401:9:RTC_Bcd2ToByte	1

@@ -1,3 +1,0 @@
-../Drivers/bsp/ov2640.c:230:6:CAMERA_IO_Write	24	static
-../Drivers/bsp/ov2640.c:247:6:CAMERA_Delay	16	static
-../Drivers/bsp/ov2640.c:267:6:ov2640_Init	24	static

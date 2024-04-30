@@ -1,3 +1,0 @@
-../Drivers/dstr/my libs/simple_delay.c:7:6:TIM1_Config	4	static
-../Drivers/dstr/my libs/simple_delay.c:20:6:delay_us	16	static
-../Drivers/dstr/my libs/simple_delay.c:26:6:delay_ms	24	static
