@@ -113,7 +113,7 @@ In summary, the OV2640 camera driver for MJPEG AVI recording on STM32F4 microcon
 
 ![Recorded videos on the pendrive](https://github.com/akaDestrocore/STM32_VIDEO_SURVEILLANCE/blob/main/pendrive.png)
 
-![Example of recorded 1 minute long video](https://github.com/akaDestrocore/STM32_VIDEO_SURVEILLANCE/blob/main/24y04m23d_REC_11_06_00.avi)
+![Example of recorded 1 minute long video converted to gif](https://github.com/akaDestrocore/STM32_VIDEO_SURVEILLANCE/blob/main/24y04m23d_REC_11_06_00.gif)
 ## Related sources
 
 1.[**RM0090 Reference manual**](https://www.st.com/resource/en/reference_manual/dm00031020-stm32f405-415-stm32f407-417-stm32f427-437-and-stm32f429-439-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf)
