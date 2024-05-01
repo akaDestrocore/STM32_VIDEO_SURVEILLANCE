@@ -46,7 +46,7 @@ This project is designed for video recording with a digital camera, utilizing th
 * **Real Time Clock**:
     * **Hour format**: 24 hours
     * **Async prediv**: 128
-    * **Synch prediv**: 255
+    * **Synch prediv**: 256
     * **Alarm**: **Alarm A** is used for triggering video recording ending and beginning of the new video recording. 
 * **Timer 1**: 
     * TIM1 is used for <simple_delay.h> module
