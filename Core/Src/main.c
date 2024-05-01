@@ -87,7 +87,6 @@ static void RTC_Config(void);
 /* @Note                 - The function sequentially compares year, month, date, hour, minute, and 		*/
 /*                         second of the two timestamps. It returns as soon as a difference is found    */
 /********************************************************************************************************/
-
 int compare_timestamp(const Current_Date_t* ts1_date, const Current_Time_t* ts1_time,
                       const Current_Date_t* ts2_date, const Current_Time_t* ts2_time)
 {
@@ -357,7 +356,6 @@ void SystemClock_Config(void)
 /*                         HAL_RCCEx_PeriphCLKConfig function. If the configuration is not successful,  */
 /*                         the Error_Handler function is called.                                        */
 /********************************************************************************************************/
-
 void PeriphCommonClock_Config(void)
 {
 	RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
