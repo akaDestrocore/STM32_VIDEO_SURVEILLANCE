@@ -82,7 +82,8 @@ Note: *Use short jumper wires for OV2640 (less than 7 cm)*
 ## System overview
 
 **OV2640 camera module**:  
-The OV2640 module used in this зкщоусе is a 8bit (D2-D9) output, including VSYNC, HREF, RET, PWDN, SIOC, SIOD, VCC and GND pins. The maximum output is 2M, and the format can be RGB565 or JPEG format. Please refer to the datasheet for more details.
+The OV2640 module used in this зкщоусе is a 8bit (D2-D9) output, including VSYNC, HREF, RET, PWDN, SIOC, SIOD, VCC and GND pins. The maximum output is 2M, and the format can be RGB565 or JPEG format. Please refer to the datasheet for more details.  
+
 ![OV2640](https://www.waveshare.com/media/catalog/product/cache/1/image/560x560/9df78eab33525d08d6e5fb8d27136e95/o/v/ov2640-camera-board_l_1_5.jpg)
 
 There are two registers for DSP and Sensor (0xFF is 0 or 1). Brief description of some of them:  
