@@ -3,6 +3,8 @@
 
 This project is designed for video recording with a digital camera, utilizing the capabilities of an STM32F4 microcontroller. In this project specifically STM32F407 Discovery development kit is used to encode the video. 
 
+![Development board](https://github.com/akaDestrocore/STM32_VIDEO_SURVEILLANCE/blob/main/controller.jpg) 
+
 ## System functions
 
 - **Video recording:** System is recording 320x240 [*RIFF-AVI Motion JPEG*](https://learn.microsoft.com/en-us/windows/win32/directshow/avi-riff-file-reference) up to 3 frames per second. 
@@ -108,6 +110,10 @@ This function writes the 'idx1' chunk, updates the file size, frame count, and o
 It closes the temporary index file used during recording and sets the recording status to **AVI_CLOSED_OUT**.
 ## Conclusion
 In summary, the OV2640 camera driver for MJPEG AVI recording on STM32F4 microcontrollers provides a robust and efficient solution for capturing and encoding video footage. By leveraging the capabilities of the OV2640 camera module and the processing power of the STM32F4 microcontroller, video recording functionality may be inplemented in embedded applications with ease and flexibility.
+
+![Recorded videos on the pendrive](https://github.com/akaDestrocore/STM32_VIDEO_SURVEILLANCE/blob/main/pendrive.png)
+
+![Example of recorded 1 minute long video](https://github.com/akaDestrocore/STM32_VIDEO_SURVEILLANCE/blob/main/24y04m23d_REC_11_06_00.avi)
 ## Related sources
 
 1.[**RM0090 Reference manual**](https://www.st.com/resource/en/reference_manual/dm00031020-stm32f405-415-stm32f407-417-stm32f427-437-and-stm32f429-439-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf)
