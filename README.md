@@ -9,8 +9,8 @@ This project is designed for video recording with a digital camera, utilizing th
 
 - **Video recording:** System is recording 320x240 [*RIFF-AVI Motion JPEG*](https://learn.microsoft.com/en-us/windows/win32/directshow/avi-riff-file-reference) up to 3 frames per second. 
 - **Storing cpatured video data on external USB drive:** Video file is being encoded on external video drive. Standart built-in FatFs library from CubeMX and HAL USB HOST driver is used for these purposes.
-- **Memory space management:** Stores up to **MAX_VIDEOS** amount of videos which in my case is **10**. Video recording time is bound to RTC so in this case each video is 1 minute long. May be adjusted according to your needs. 
-- **System settings:** Allows administrator to enter system settings and modify some fingerprint database and password options. Also lets them change the alarm duration and doing hard reset of the MCU.  
+- **Memory space management:** Stores up to **MAX_VIDEOS** amount of videos which in my case is **10**. Video recording time is bound to RTC so in this case each video is 1 minute long. May be adjusted according to your needs.
+
 ## Main Components
 
 * STM32F4 Discovery board
