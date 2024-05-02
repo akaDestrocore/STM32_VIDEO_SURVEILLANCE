@@ -227,16 +227,16 @@ void rec_begin(void)
     // Delete the oldest video if there are already 10 videos recorded
     check_delete_oldest_video();
 
-	char fn[64];
-	memset(fn, 0, 64);
+    char fn[64];
+    memset(fn, 0, 64);
 
-	sprintf(fn, "0:/VIDEO/%02dy%02dm%02dd_REC_%02d_%02d_%02d.avi",
-			sCurrent.Date.year, sCurrent.Date.month, sCurrent.Date.date, sCurrent.Time.hour, sCurrent.Time.minute, sCurrent.Time.second);
-	res = f_open(&file, fn, FA_CREATE_ALWAYS|FA_WRITE);
-	if (res==FR_OK)
-	{
-	  start_output_mjpeg_avi(&file, &hdcmi, (uint8_t)3, (uint8_t)1);
-	}
+    sprintf(fn, "0:/VIDEO/%02dy%02dm%02dd_REC_%02d_%02d_%02d.avi",
+    sCurrent.Date.year, sCurrent.Date.month, sCurrent.Date.date, sCurrent.Time.hour, sCurrent.Time.minute, sCurrent.Time.second);
+    res = f_open(&file, fn, FA_CREATE_ALWAYS|FA_WRITE);
+    if (res==FR_OK)
+    {
+	start_output_mjpeg_avi(&file, &hdcmi, (uint8_t)3, (uint8_t)1);
+    }
 }
 
 /********************************************************************************************************/
