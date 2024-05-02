@@ -217,7 +217,7 @@ void check_delete_oldest_video(void)
 void rec_begin(void)
 {
 
-	Current_Date_Handle_t sCurrent;
+    Current_Date_Handle_t sCurrent;
     RTC_GetTime(&hrtc, &sCurrent);
     RTC_GetDate(&hrtc, &sCurrent);
 
